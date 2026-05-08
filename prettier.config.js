@@ -1,6 +1,6 @@
 //  @ts-check
 
-/** @type {import('prettier').Config} */
+/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
 const config = {
   semi: true,
   singleQuote: false,
@@ -8,6 +8,8 @@ const config = {
   printWidth: 95,
   arrowParens: "always",
   endOfLine: "lf",
+  plugins: ["prettier-plugin-tailwindcss"],
+  tailwindStylesheet: "./src/styles.css",
 };
 
 export default config;
