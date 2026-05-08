@@ -2,13 +2,12 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+.nitro
 *.local
 .env
-.nitro
 .tanstack
 .wrangler
 .output
 .vinxi
 __unconfig*
-todos.json
 src/generated/
