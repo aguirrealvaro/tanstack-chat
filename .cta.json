@@ -18,9 +18,5 @@
   "routerOnly": false,
   "version": 1,
   "framework": "react",
-  "chosenAddOns": [
-    "eslint",
-    "clerk",
-    "prisma"
-  ]
+  "chosenAddOns": ["eslint", "clerk", "prisma"]
 }
