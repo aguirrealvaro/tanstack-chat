@@ -7,8 +7,29 @@ datasource db {
   provider = "postgresql"
 }
 
-model Todo {
+model User {
+  id               Int       @id @default(autoincrement())
+  clerkId          String    @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  firstName        String
+  lastName         String
+  email            String    @unique
+  imageUrl         String
+  messagesSent     Message[] @relation("MessageFrom")
+  messagesReceived Message[] @relation("MessageTo")
+}
+
+model Message {
   id        Int      @id @default(autoincrement())
-  title     String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  text      String   @db.Text
+  seen      Boolean  @default(false)
+
+  from   User @relation("MessageFrom", fields: [fromId], references: [id])
+  fromId Int
+
+  to   User @relation("MessageTo", fields: [toId], references: [id])
+  toId Int
 }
