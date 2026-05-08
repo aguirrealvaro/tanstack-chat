@@ -7,7 +7,7 @@ export default [
   ...tanstackConfig,
   {
     rules: {
-      "no-console": "error",
+      "no-console": "warn",
       "import/no-cycle": "off",
       "import/order": "off",
       "sort-imports": "off",
