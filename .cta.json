@@ -1,0 +1,26 @@
+{
+  "projectName": "tanstack-chat",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "npm",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {
+    "prisma": {
+      "database": "postgres"
+    }
+  },
+  "envVarValues": {
+    "VITE_CLERK_PUBLISHABLE_KEY": "pk_test_bm9ybWFsLXNwYW5pZWwtMzMuY2xlcmsuYWNjb3VudHMuZGV2JA"
+  },
+  "git": true,
+  "install": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "eslint",
+    "clerk",
+    "prisma"
+  ]
+}
