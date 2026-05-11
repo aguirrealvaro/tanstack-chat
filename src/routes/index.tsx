@@ -1,4 +1,4 @@
-import HeaderUser from "#/integrations/clerk/header-user";
+import { HeaderUser } from "@/components";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({ component: Home });

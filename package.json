@@ -12,6 +12,7 @@
     "test": "vitest run",
     "lint": "eslint",
     "check": "prettier --check .",
+    "types": "tsc --noEmit",
     "format": "prettier --write . && eslint --fix",
     "post-cta-init": "npx -y create-db@latest --user-agent tanstack/tsrouter",
     "db:generate": "dotenv -e .env.local -- prisma generate",

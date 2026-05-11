@@ -1,6 +1,6 @@
 import { SignedIn, SignInButton, SignedOut, UserButton } from "@clerk/clerk-react";
 
-export default function HeaderUser() {
+export const HeaderUser = () => {
   return (
     <>
       <SignedIn>
@@ -11,4 +11,4 @@ export default function HeaderUser() {
       </SignedOut>
     </>
   );
-}
+};
