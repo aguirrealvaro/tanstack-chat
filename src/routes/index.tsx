@@ -1,62 +1,6 @@
 import { Contacts, UserLoggedIn } from "@/components";
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { auth } from "@clerk/tanstack-react-start/server";
-import { prisma } from "@/db";
-
-const authGuard = createServerFn().handler(async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw redirect({ to: "/sign-in" });
-  }
-
-  return { userId };
-});
-
-const getCurrentUser = createServerFn().handler(async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
-  const currentUser = await prisma.user.findUnique({ where: { clerkId: userId } });
-
-  if (!currentUser) {
-    throw new Error("No current user");
-  }
-
-  return currentUser;
-});
-
-const getUsers = createServerFn().handler(async () => {
-  const currentUser = await getCurrentUser();
-
-  const users = await prisma.user.findMany({
-    include: {
-      messagesReceived: {
-        where: { fromId: currentUser.id },
-        orderBy: {
-          createdAt: "asc",
-        },
-      },
-      messagesSent: {
-        where: { toId: currentUser.id },
-        orderBy: {
-          createdAt: "asc",
-        },
-      },
-    },
-    where: {
-      id: {
-        not: { equals: currentUser.id },
-      },
-    },
-  });
-
-  return users;
-});
+import { authGuard, getCurrentUser, getUsers } from "@/server-fns";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => authGuard(),

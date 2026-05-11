@@ -1,0 +1,13 @@
+import { redirect } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { auth } from "@clerk/tanstack-react-start/server";
+
+export const authGuard = createServerFn().handler(async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw redirect({ to: "/sign-in" });
+  }
+
+  return { userId };
+});
