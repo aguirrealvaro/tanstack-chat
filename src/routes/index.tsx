@@ -2,7 +2,9 @@ import { HeaderUser, ThemeToggle } from "@/components";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  component: Home,
+});
 
 function Home() {
   return (
