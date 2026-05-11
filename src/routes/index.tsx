@@ -1,4 +1,5 @@
 import { HeaderUser } from "@/components";
+import { Button } from "@/components/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -11,6 +12,7 @@ function Home() {
         Edit <code>src/routes/index.tsx</code> to get started
       </p>
       <HeaderUser />
+      <Button>Click me</Button>
     </div>
   );
 }
