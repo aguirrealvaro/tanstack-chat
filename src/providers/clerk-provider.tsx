@@ -7,7 +7,12 @@ if (!PUBLISHABLE_KEY) {
 
 export const ClerkProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <DefaultClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <DefaultClerkProvider
+      publishableKey={PUBLISHABLE_KEY}
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      afterSignOutUrl="/"
+    >
       {children}
     </DefaultClerkProvider>
   );
