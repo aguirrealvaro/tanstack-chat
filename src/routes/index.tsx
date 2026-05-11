@@ -1,8 +1,8 @@
-import { ThemeToggle } from "@/components";
+import { UserLoggedIn } from "@/components";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { auth } from "@clerk/tanstack-react-start/server";
-import { UserButton } from "@clerk/tanstack-react-start";
+import { prisma } from "@/db";
 
 const authGuard = createServerFn().handler(async () => {
   const { userId } = await auth();
@@ -14,20 +14,35 @@ const authGuard = createServerFn().handler(async () => {
   return { userId };
 });
 
+const getCurrentUser = createServerFn().handler(async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const currentUser = await prisma.user.findUnique({ where: { clerkId: userId } });
+
+  if (!currentUser) {
+    throw new Error("No current user");
+  }
+
+  return currentUser;
+});
+
 export const Route = createFileRoute("/")({
   beforeLoad: () => authGuard(),
   component: Home,
+  loader: () => getCurrentUser(),
 });
 
 function Home() {
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started
-      </p>
-      <UserButton />
-      <ThemeToggle />
+    <div className="m-4 flex h-full rounded border bg-card text-card-foreground shadow">
+      <div className="flex flex-1 flex-col border-r p-4">
+        <UserLoggedIn />
+      </div>
+      <div className="flex flex-2 flex-col p-4">messages</div>
     </div>
   );
 }
