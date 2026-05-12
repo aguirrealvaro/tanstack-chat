@@ -4,19 +4,22 @@ import { Route as HomeRoute } from "@/routes/index";
 import { UserSelected } from "./user-selected";
 import { Messages } from "./messages";
 import { InputMessage } from "./input-message";
+import { cn } from "@/lib/utils";
+
+const styles = cn("flex flex-1 items-center justify-center");
 
 export const ChatPanel = () => {
-  const { user: selectedUser } = HomeRoute.useSearch();
   const { data: users } = useSuspenseQuery(usersQueryOptions());
+  const { user: selectedUser } = HomeRoute.useSearch();
+
+  if (!selectedUser) {
+    return <span className={styles}>Select user to start a conversation</span>;
+  }
 
   const selectedUserData = users.find((user) => user.id === selectedUser);
 
   if (!selectedUserData) {
-    return (
-      <span className="flex flex-1 items-center justify-center">
-        {selectedUser ? "Invalid user" : "Select user to start a conversation"}
-      </span>
-    );
+    return <span className={styles}>Invalid user</span>;
   }
 
   return (
