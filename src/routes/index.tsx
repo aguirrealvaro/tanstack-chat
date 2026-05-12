@@ -1,5 +1,5 @@
 import { Contacts, UserLoggedIn, UserSelected } from "@/components";
-import { authGuard, getCurrentUser, getUsers, getUser } from "@/server-fns";
+import { authGuard, getCurrentUser, getUsers } from "@/server-fns";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -8,14 +8,9 @@ export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>) => ({
     user: Number(search.user) || undefined,
   }),
-  loaderDeps: ({ search: { user } }) => ({ user }),
-  loader: async ({ deps: { user } }) => {
-    const [currentUser, users, selectedUser] = await Promise.all([
-      getCurrentUser(),
-      getUsers(),
-      user ? getUser({ data: user }) : null,
-    ]);
-    return { currentUser, users, selectedUser };
+  loader: async () => {
+    const [currentUser, users] = await Promise.all([getCurrentUser(), getUsers()]);
+    return { currentUser, users };
   },
 });
 

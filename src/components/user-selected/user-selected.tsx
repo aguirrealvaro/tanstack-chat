@@ -2,13 +2,13 @@ import { Route as HomeRoute } from "@/routes/index";
 import { X } from "lucide-react";
 
 export const UserSelected = () => {
-  const { selectedUser } = HomeRoute.useLoaderData();
-
+  const { users } = HomeRoute.useLoaderData();
+  const { user: searchUserId } = HomeRoute.useSearch();
   const navigate = HomeRoute.useNavigate();
 
-  if (!selectedUser) {
-    return null;
-  }
+  const selectedUser = users.find((user) => user.id === searchUserId);
+
+  if (!selectedUser) return null;
 
   const closeChat = () => {
     navigate({ search: { user: undefined } });
