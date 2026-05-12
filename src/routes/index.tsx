@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
   beforeLoad: () => authGuard(),
   component: Home,
   validateSearch: (search: Record<string, unknown>) => ({
-    user: (search.user as string) || undefined,
+    user: Number(search.user) || undefined,
   }),
   loader: async () => {
     const [currentUser, users] = await Promise.all([getCurrentUser(), getUsers()]);

@@ -26,7 +26,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
   const navigate = HomeRoute.useNavigate();
 
   const handleSelectUser = () => {
-    navigate({ search: { user: String(user.id) } });
+    navigate({ search: { user: user.id } });
   };
 
   return (
