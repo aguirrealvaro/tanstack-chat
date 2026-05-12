@@ -3,10 +3,10 @@ import { X } from "lucide-react";
 
 export const UserSelected = () => {
   const { users } = HomeRoute.useLoaderData();
-  const { user: searchUserId } = HomeRoute.useSearch();
+  const { user: selectedUserId } = HomeRoute.useSearch();
   const navigate = HomeRoute.useNavigate();
 
-  const selectedUser = users.find((user) => user.id === searchUserId);
+  const selectedUser = users.find((user) => user.id === selectedUserId);
 
   if (!selectedUser) return null;
 
