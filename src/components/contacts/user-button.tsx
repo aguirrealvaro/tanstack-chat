@@ -34,7 +34,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
       className={cn(
         "flex w-full cursor-pointer items-center gap-4",
         "rounded px-4 py-2",
-        "hover:bg-hover",
+        "hover:bg-muted",
       )}
       onClick={handleSelectUser}
     >
@@ -56,18 +56,20 @@ export const UserButton = ({ user }: { user: UserType }) => {
                   {lastMessage.seen && <Check size={13} className="-ml-2" />}
                 </div>
               )}
-              <span className="text-text-secondary text-left text-sm">{lastMessage.text}</span>
+              <span className="text-left text-sm text-muted-foreground">
+                {lastMessage.text}
+              </span>
             </div>
           )}
         </div>
         {lastMessage && (
-          <div className="text-text-secondary flex flex-col items-center gap-1 text-sm">
+          <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
             <span>{getMessageTime(lastMessage.createdAt)}</span>
             {showUnseenMessages && (
               <span
                 className={cn(
                   "flex size-5 items-center justify-center rounded-full text-xs",
-                  "bg-black text-white dark:bg-white dark:text-white",
+                  "bg-foreground text-background",
                 )}
               >
                 {unseenMessages}

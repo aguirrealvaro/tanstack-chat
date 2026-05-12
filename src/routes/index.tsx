@@ -1,5 +1,5 @@
-import { Contacts, UserLoggedIn } from "@/components";
-import { authGuard, getCurrentUser, getUsers } from "@/server-fns";
+import { Contacts, UserLoggedIn, UserSelected } from "@/components";
+import { authGuard, getCurrentUser, getUsers, getUser } from "@/server-fns";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -8,9 +8,14 @@ export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>) => ({
     user: Number(search.user) || undefined,
   }),
-  loader: async () => {
-    const [currentUser, users] = await Promise.all([getCurrentUser(), getUsers()]);
-    return { currentUser, users };
+  loaderDeps: ({ search: { user } }) => ({ user }),
+  loader: async ({ deps: { user } }) => {
+    const [currentUser, users, selectedUser] = await Promise.all([
+      getCurrentUser(),
+      getUsers(),
+      user ? getUser({ data: user }) : null,
+    ]);
+    return { currentUser, users, selectedUser };
   },
 });
 
@@ -21,7 +26,9 @@ function Home() {
         <UserLoggedIn />
         <Contacts />
       </div>
-      <div className="flex flex-2 flex-col p-4">messages</div>
+      <div className="flex flex-2 flex-col p-4">
+        <UserSelected />
+      </div>
     </div>
   );
 }
