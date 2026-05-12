@@ -20,7 +20,7 @@ const useAutoScroll = (chat: Message[]) => {
 export const Messages = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
   const { currentUser } = HomeRoute.useRouteContext();
-  const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser!));
+  const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
 
   const { containerRef } = useAutoScroll(chat);
 

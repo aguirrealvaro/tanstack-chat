@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
   loader: async ({ deps: { selectedUser }, context: { queryClient } }) => {
     await Promise.all([
       queryClient.ensureQueryData(usersQueryOptions()),
-      selectedUser ? queryClient.ensureQueryData(chatQueryOptions(selectedUser)) : null,
+      queryClient.ensureQueryData(chatQueryOptions(selectedUser)),
     ]);
   },
 });
