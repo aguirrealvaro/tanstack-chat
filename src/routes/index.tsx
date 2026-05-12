@@ -7,8 +7,7 @@ import {
   Footer,
 } from "@/components";
 import { getCurrentUser } from "@/server-fns";
-import { usersQueryOptions } from "@/queries/users";
-import { chatQueryOptions } from "@/queries/chat";
+import { usersQueryOptions, chatQueryOptions } from "@/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
