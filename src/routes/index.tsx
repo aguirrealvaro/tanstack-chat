@@ -3,6 +3,8 @@ import { getCurrentUser } from "@/server-fns";
 import { usersQueryOptions, chatQueryOptions } from "@/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -29,8 +31,10 @@ function Home() {
           <UserLoggedIn />
           <Suspense
             fallback={
-              <div className="flex flex-1 items-center justify-center">
-                Loading contacts...
+              <div className="flex flex-col gap-4">
+                {Array.from(Array(2).keys()).map((key) => (
+                  <Skeleton className="h-12" key={key} />
+                ))}
               </div>
             }
           >
@@ -40,8 +44,16 @@ function Home() {
         <div className="flex flex-2 flex-col p-4">
           <Suspense
             fallback={
-              <div className="flex flex-1 items-center justify-center">
-                Loading messages...
+              <div className="flex flex-1 flex-col gap-4">
+                {Array.from(Array(10).keys()).map((key) => {
+                  const isOdd = key % 2 === 0;
+                  return (
+                    <Skeleton
+                      className={cn("h-8 w-44", isOdd ? "self-start" : "self-end")}
+                      key={key}
+                    />
+                  );
+                })}
               </div>
             }
           >
