@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/tanstack-react-start";
-import { ThemeToggle } from "./theme-toggle";
 import { Route as HomeRoute } from "@/routes/index";
+import { ThemeToggle } from "../theme-toggle";
 
 export const UserLoggedIn = () => {
   const { currentUser } = HomeRoute.useRouteContext();

@@ -1,15 +1,8 @@
-import {
-  Contacts,
-  Messages,
-  UserLoggedIn,
-  UserSelected,
-  InputMessage,
-  Footer,
-} from "@/components";
+import { Contacts, UserLoggedIn, ChatPanel, Footer } from "@/components";
 import { getCurrentUser } from "@/server-fns";
 import { usersQueryOptions, chatQueryOptions } from "@/queries";
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -21,41 +14,39 @@ export const Route = createFileRoute("/")({
     user: Number(search.user) || undefined,
   }),
   loaderDeps: ({ search: { user: selectedUser } }) => ({ selectedUser }),
-  loader: async ({ deps: { selectedUser }, context: { queryClient } }) => {
-    await Promise.all([
-      queryClient.ensureQueryData(usersQueryOptions()),
-      queryClient.ensureQueryData(chatQueryOptions(selectedUser)),
-    ]);
+  loader: ({ deps: { selectedUser }, context: { queryClient } }) => {
+    // `prefetchQuery` instead of `ensureQueryData` to avoid blocking the main thread and use suspense instead
+    queryClient.prefetchQuery(usersQueryOptions());
+    queryClient.prefetchQuery(chatQueryOptions(selectedUser));
   },
 });
 
 function Home() {
-  const { user: selectedUser } = Route.useSearch();
-  const { data: users } = useSuspenseQuery(usersQueryOptions());
-
-  const selectedUserData = users.find((user) => user.id === selectedUser);
-
   return (
     <>
       <main className="m-4 flex h-full rounded border bg-card text-card-foreground shadow">
         <div className="flex flex-1 flex-col border-r p-4">
           <UserLoggedIn />
-          <Contacts />
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center">
+                Loading contacts...
+              </div>
+            }
+          >
+            <Contacts />
+          </Suspense>
         </div>
         <div className="flex flex-2 flex-col p-4">
-          {selectedUserData ? (
-            <>
-              <UserSelected selectedUserData={selectedUserData} />
-              <div className="flex flex-1 flex-col gap-4">
-                <Messages />
-                <InputMessage />
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center">
+                Loading messages...
               </div>
-            </>
-          ) : (
-            <span className="flex flex-1 items-center justify-center">
-              {selectedUser ? "Invalid user" : "Select user to start a conversation"}
-            </span>
-          )}
+            }
+          >
+            <ChatPanel />
+          </Suspense>
         </div>
       </main>
       <Footer />
