@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
 
 export const InputMessage = () => {
-  const { user: userSelected } = HomeRoute.useSearch();
+  const { user: selectedUser } = HomeRoute.useSearch();
   const router = useRouter();
 
-  if (!userSelected) return null;
+  if (!selectedUser) return null;
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ export const InputMessage = () => {
 
     if (!message.trim()) return;
 
-    await sendMessage({ data: { message, userSelected } });
+    await sendMessage({ data: { message, selectedUser } });
     form.reset();
     router.invalidate();
   };

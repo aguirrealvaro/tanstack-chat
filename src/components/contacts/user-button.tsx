@@ -12,7 +12,7 @@ const getMessageTime = (date: Date) => {
 };
 
 export const UserButton = ({ user }: { user: UserType }) => {
-  const { currentUser } = HomeRoute.useLoaderData();
+  const { currentUser } = HomeRoute.useRouteContext();
 
   const lastMessage = getLastMessage(user);
 

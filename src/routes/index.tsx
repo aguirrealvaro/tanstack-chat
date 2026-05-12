@@ -19,11 +19,11 @@ export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>) => ({
     user: Number(search.user) || undefined,
   }),
-  loaderDeps: ({ search: { user } }) => ({ user }),
-  loader: async ({ deps: { user } }) => {
+  loaderDeps: ({ search: { user: selectedUser } }) => ({ selectedUser }),
+  loader: async ({ deps: { selectedUser } }) => {
     const [users, chat] = await Promise.all([
       getUsers(),
-      user ? getChat({ data: user }) : null,
+      selectedUser ? getChat({ data: selectedUser }) : null,
     ]);
     return { users, chat };
   },

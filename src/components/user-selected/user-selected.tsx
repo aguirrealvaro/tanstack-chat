@@ -3,12 +3,12 @@ import { X } from "lucide-react";
 
 export const UserSelected = () => {
   const { users } = HomeRoute.useLoaderData();
-  const { user: selectedUserId } = HomeRoute.useSearch();
+  const { user: selectedUser } = HomeRoute.useSearch();
   const navigate = HomeRoute.useNavigate();
 
-  const selectedUser = users.find((user) => user.id === selectedUserId);
+  const selectedUserData = users.find((user) => user.id === selectedUser);
 
-  if (!selectedUser) return null;
+  if (!selectedUserData) return null;
 
   const closeChat = () => {
     navigate({ search: { user: undefined } });
@@ -19,16 +19,16 @@ export const UserSelected = () => {
       <div className="flex items-center">
         <div className="flex items-center gap-4">
           <img
-            src={selectedUser.imageUrl}
+            src={selectedUserData.imageUrl}
             width={28}
             height={28}
-            alt={`${selectedUser.firstName}'s-profile-image`}
+            alt={`${selectedUserData.firstName}'s-profile-image`}
             className="rounded-full"
           />
           <div className="flex flex-col">
-            <span>{selectedUser.firstName}</span>
+            <span>{selectedUserData.firstName}</span>
             <span className="pointer-events-none truncate text-sm text-muted-foreground">
-              {selectedUser.email}
+              {selectedUserData.email}
             </span>
           </div>
         </div>

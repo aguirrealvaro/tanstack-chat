@@ -7,17 +7,17 @@ export const sendMessage = createServerFn()
   .inputValidator(
     z.object({
       message: z.string(),
-      userSelected: z.number(),
+      selectedUser: z.number(),
     }),
   )
-  .handler(async ({ data: { message, userSelected } }) => {
+  .handler(async ({ data: { message, selectedUser } }) => {
     const currentUser = await getCurrentUser();
 
     await prisma.message.create({
       data: {
         text: message,
         fromId: currentUser.id,
-        toId: Number(userSelected),
+        toId: selectedUser,
       },
     });
 
