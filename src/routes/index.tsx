@@ -30,6 +30,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { user: selectedUser } = Route.useSearch();
+
   return (
     <>
       <main className="m-4 flex h-full rounded border bg-card text-card-foreground shadow">
@@ -40,8 +42,16 @@ function Home() {
         <div className="flex flex-2 flex-col p-4">
           <UserSelected />
           <div className="flex flex-1 flex-col gap-4">
-            <Messages />
-            <InputMessage />
+            {selectedUser ? (
+              <>
+                <Messages />
+                <InputMessage />
+              </>
+            ) : (
+              <span className="flex flex-1 items-center justify-center">
+                Select user to start a conversation
+              </span>
+            )}
           </div>
         </div>
       </main>

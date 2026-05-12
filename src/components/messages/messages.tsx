@@ -16,18 +16,12 @@ const useAutoScroll = (chat: Message[] | null) => {
 };
 
 export const Messages = () => {
-  const { user: selectedUserId } = HomeRoute.useSearch();
   const { chat } = HomeRoute.useLoaderData();
   const { currentUser } = HomeRoute.useRouteContext();
 
   const { containerRef } = useAutoScroll(chat);
 
-  if (!selectedUserId || !chat)
-    return (
-      <span className="flex flex-1 items-center justify-center">
-        Select user to start a conversation
-      </span>
-    );
+  if (!chat) return null;
 
   return (
     <div
