@@ -1,13 +1,12 @@
 import { prisma } from "@/db";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getCurrentUser } from "./get-current-user";
+import { authMiddleware } from "./auth-middleware";
 
 export const getChat = createServerFn()
+  .middleware([authMiddleware])
   .inputValidator(z.number())
-  .handler(async ({ data: userSelected }) => {
-    const currentUser = await getCurrentUser();
-
+  .handler(async ({ data: userSelected, context: { currentUser } }) => {
     await prisma.message.updateMany({
       where: { fromId: Number(userSelected), toId: currentUser.id },
       data: { seen: true },
