@@ -33,7 +33,7 @@ export const UserSelected = () => {
           </div>
         </div>
       </div>
-      <button className="rounded-full p-2" onClick={closeChat}>
+      <button className="rounded-full p-2 hover:bg-muted" onClick={closeChat}>
         <X size={18} />
       </button>
     </div>

@@ -10,7 +10,7 @@ const ThemeToggle = () => {
   };
 
   return (
-    <button onClick={handleToggle} className={cn("rounded p-2 transition", "hover:bg-hover")}>
+    <button onClick={handleToggle} className={cn("rounded p-2 transition", "hover:bg-muted")}>
       <Sun size={20} className="block dark:hidden" />
       <Moon size={20} className="hidden dark:block" />
     </button>
