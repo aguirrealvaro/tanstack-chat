@@ -1,8 +1,9 @@
-import { Route as HomeRoute } from "@/routes/index";
+import { usersQueryOptions } from "@/queries/users";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { UserButton } from "./user-button";
 
 export const Contacts = () => {
-  const { users } = HomeRoute.useLoaderData();
+  const { data: users } = useSuspenseQuery(usersQueryOptions());
 
   if (users.length === 0) {
     return <span>There are no registered users</span>;

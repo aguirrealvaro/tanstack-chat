@@ -6,8 +6,10 @@ import {
   InputMessage,
   Footer,
 } from "@/components";
-import { getChat, getCurrentUser, getUsers } from "@/server-fns";
+import { getChat, getCurrentUser } from "@/server-fns";
+import { usersQueryOptions } from "@/queries/users";
 import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -19,18 +21,18 @@ export const Route = createFileRoute("/")({
     user: Number(search.user) || undefined,
   }),
   loaderDeps: ({ search: { user: selectedUser } }) => ({ selectedUser }),
-  loader: async ({ deps: { selectedUser } }) => {
-    const [users, chat] = await Promise.all([
-      getUsers(),
+  loader: async ({ deps: { selectedUser }, context: { queryClient } }) => {
+    const [, chat] = await Promise.all([
+      queryClient.ensureQueryData(usersQueryOptions()),
       selectedUser ? getChat({ data: selectedUser }) : null,
     ]);
-    return { users, chat };
+    return { chat };
   },
 });
 
 function Home() {
   const { user: selectedUser } = Route.useSearch();
-  const { users } = Route.useLoaderData();
+  const { data: users } = useSuspenseQuery(usersQueryOptions());
 
   const selectedUserData = users.find((user) => user.id === selectedUser);
 

@@ -1,12 +1,12 @@
 import { sendMessage } from "@/server-fns";
 import { Route as HomeRoute } from "@/routes/index";
-import { useRouter } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   if (!selectedUser) return null;
 
@@ -20,7 +20,7 @@ export const InputMessage = () => {
 
     await sendMessage({ data: { message, selectedUser } });
     form.reset();
-    router.invalidate();
+    queryClient.invalidateQueries({ queryKey: ["users"] });
   };
 
   return (
