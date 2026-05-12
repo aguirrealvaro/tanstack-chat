@@ -1,19 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { auth } from "@clerk/tanstack-react-start/server";
-import { prisma } from "@/db";
+import { authMiddleware } from "./auth-middleware";
 
-export const getCurrentUser = createServerFn().handler(async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
-  const currentUser = await prisma.user.findUnique({ where: { clerkId: userId } });
-
-  if (!currentUser) {
-    throw new Error("No current user");
-  }
-
-  return currentUser;
-});
+export const getCurrentUser = createServerFn()
+  .middleware([authMiddleware])
+  .handler(async ({ context: { currentUser } }) => {
+    return currentUser;
+  });

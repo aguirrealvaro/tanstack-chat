@@ -1,14 +1,9 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { X } from "lucide-react";
+import type { User } from "@/generated/prisma/client";
 
-export const UserSelected = () => {
-  const { users } = HomeRoute.useLoaderData();
-  const { user: selectedUser } = HomeRoute.useSearch();
+export const UserSelected = ({ selectedUserData }: { selectedUserData: User }) => {
   const navigate = HomeRoute.useNavigate();
-
-  const selectedUserData = users.find((user) => user.id === selectedUser);
-
-  if (!selectedUserData) return null;
 
   const closeChat = () => {
     navigate({ search: { user: undefined } });

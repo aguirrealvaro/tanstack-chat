@@ -6,12 +6,11 @@ import {
   InputMessage,
   Footer,
 } from "@/components";
-import { authGuard, getChat, getCurrentUser, getUsers } from "@/server-fns";
+import { getChat, getCurrentUser, getUsers } from "@/server-fns";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
-    await authGuard();
     const currentUser = await getCurrentUser();
     return { currentUser };
   },
@@ -31,6 +30,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { user: selectedUser } = Route.useSearch();
+  const { users } = Route.useLoaderData();
+
+  const selectedUserData = users.find((user) => user.id === selectedUser);
 
   return (
     <>
@@ -40,19 +42,19 @@ function Home() {
           <Contacts />
         </div>
         <div className="flex flex-2 flex-col p-4">
-          <UserSelected />
-          <div className="flex flex-1 flex-col gap-4">
-            {selectedUser ? (
-              <>
+          {selectedUserData ? (
+            <>
+              <UserSelected selectedUserData={selectedUserData} />
+              <div className="flex flex-1 flex-col gap-4">
                 <Messages />
                 <InputMessage />
-              </>
-            ) : (
-              <span className="flex flex-1 items-center justify-center">
-                Select user to start a conversation
-              </span>
-            )}
-          </div>
+              </div>
+            </>
+          ) : (
+            <span className="flex flex-1 items-center justify-center">
+              {selectedUser ? "Invalid user" : "Select user to start a conversation"}
+            </span>
+          )}
         </div>
       </main>
       <Footer />
