@@ -1,10 +1,17 @@
-import { HeadContent, Scripts, createRootRoute, Link } from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+  Link,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ClerkProvider, ThemeProvider } from "@/providers";
 import appCss from "../styles.css?url";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       {
@@ -59,6 +66,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 {
                   name: "Tanstack Router",
                   render: <TanStackRouterDevtoolsPanel />,
+                },
+                {
+                  name: "Tanstack Query",
+                  render: <ReactQueryDevtools buttonPosition="relative" />,
                 },
               ]}
             />
