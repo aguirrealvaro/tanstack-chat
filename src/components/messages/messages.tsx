@@ -2,10 +2,7 @@ import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
 import { useEffect, useRef } from "react";
 
-export const Messages = () => {
-  const { user: selectedUserId } = HomeRoute.useSearch();
-  const { chat, currentUser } = HomeRoute.useLoaderData();
-
+const useAutoScroll = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,6 +10,15 @@ export const Messages = () => {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, []);
+
+  return { containerRef };
+};
+
+export const Messages = () => {
+  const { user: selectedUserId } = HomeRoute.useSearch();
+  const { chat, currentUser } = HomeRoute.useLoaderData();
+
+  const { containerRef } = useAutoScroll();
 
   if (!selectedUserId || !chat)
     return (
