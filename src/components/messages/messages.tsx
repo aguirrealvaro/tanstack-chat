@@ -17,7 +17,8 @@ const useAutoScroll = (chat: Message[] | null) => {
 
 export const Messages = () => {
   const { user: selectedUserId } = HomeRoute.useSearch();
-  const { chat, currentUser } = HomeRoute.useLoaderData();
+  const { chat } = HomeRoute.useLoaderData();
+  const { currentUser } = HomeRoute.useRouteContext();
 
   const { containerRef } = useAutoScroll(chat);
 

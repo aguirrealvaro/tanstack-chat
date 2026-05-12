@@ -10,19 +10,22 @@ import { authGuard, getChat, getCurrentUser, getUsers } from "@/server-fns";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => authGuard(),
+  beforeLoad: async () => {
+    await authGuard();
+    const currentUser = await getCurrentUser();
+    return { currentUser };
+  },
   component: Home,
   validateSearch: (search: Record<string, unknown>) => ({
     user: Number(search.user) || undefined,
   }),
   loaderDeps: ({ search: { user } }) => ({ user }),
   loader: async ({ deps: { user } }) => {
-    const [currentUser, users, chat] = await Promise.all([
-      getCurrentUser(),
+    const [users, chat] = await Promise.all([
       getUsers(),
       user ? getChat({ data: user }) : null,
     ]);
-    return { currentUser, users, chat };
+    return { users, chat };
   },
 });
 

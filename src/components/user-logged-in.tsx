@@ -3,7 +3,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { Route as HomeRoute } from "@/routes/index";
 
 export const UserLoggedIn = () => {
-  const { currentUser } = HomeRoute.useLoaderData();
+  const { currentUser } = HomeRoute.useRouteContext();
 
   return (
     <div className="mb-4 flex items-center justify-between gap-4 border-b px-4 pb-4">
