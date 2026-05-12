@@ -5,6 +5,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   beforeLoad: () => authGuard(),
   component: Home,
+  validateSearch: (search: Record<string, unknown>) => ({
+    user: (search.user as string) || undefined,
+  }),
   loader: async () => {
     const [currentUser, users] = await Promise.all([getCurrentUser(), getUsers()]);
     return { currentUser, users };
