@@ -1,15 +1,16 @@
+import type { Message } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
 import { useEffect, useRef } from "react";
 
-const useAutoScroll = () => {
+const useAutoScroll = (chat: Message[] | null) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, []);
+  }, [chat]);
 
   return { containerRef };
 };
@@ -18,7 +19,7 @@ export const Messages = () => {
   const { user: selectedUserId } = HomeRoute.useSearch();
   const { chat, currentUser } = HomeRoute.useLoaderData();
 
-  const { containerRef } = useAutoScroll();
+  const { containerRef } = useAutoScroll(chat);
 
   if (!selectedUserId || !chat)
     return (
