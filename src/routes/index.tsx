@@ -6,8 +6,9 @@ import {
   InputMessage,
   Footer,
 } from "@/components";
-import { getChat, getCurrentUser } from "@/server-fns";
+import { getCurrentUser } from "@/server-fns";
 import { usersQueryOptions } from "@/queries/users";
+import { chatQueryOptions } from "@/queries/chat";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
@@ -22,11 +23,10 @@ export const Route = createFileRoute("/")({
   }),
   loaderDeps: ({ search: { user: selectedUser } }) => ({ selectedUser }),
   loader: async ({ deps: { selectedUser }, context: { queryClient } }) => {
-    const [, chat] = await Promise.all([
+    await Promise.all([
       queryClient.ensureQueryData(usersQueryOptions()),
-      selectedUser ? getChat({ data: selectedUser }) : null,
+      selectedUser ? queryClient.ensureQueryData(chatQueryOptions(selectedUser)) : null,
     ]);
-    return { chat };
   },
 });
 

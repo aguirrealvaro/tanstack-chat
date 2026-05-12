@@ -21,6 +21,7 @@ export const InputMessage = () => {
     await sendMessage({ data: { message, selectedUser } });
     form.reset();
     queryClient.invalidateQueries({ queryKey: ["users"] });
+    queryClient.invalidateQueries({ queryKey: ["chat", selectedUser] });
   };
 
   return (

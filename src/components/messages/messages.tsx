@@ -1,9 +1,11 @@
 import type { Message } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
+import { chatQueryOptions } from "@/queries/chat";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
-const useAutoScroll = (chat: Message[] | null) => {
+const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,12 +18,11 @@ const useAutoScroll = (chat: Message[] | null) => {
 };
 
 export const Messages = () => {
-  const { chat } = HomeRoute.useLoaderData();
+  const { user: selectedUser } = HomeRoute.useSearch();
   const { currentUser } = HomeRoute.useRouteContext();
+  const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser!));
 
   const { containerRef } = useAutoScroll(chat);
-
-  if (!chat) return null;
 
   return (
     <div
