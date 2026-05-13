@@ -1,4 +1,5 @@
 import type { UserType } from "./types";
+import { isSameDay } from "date-fns";
 
 export const getLastMessage = (user: UserType) => {
   const lastMessageReceived = user.messagesReceived[user.messagesReceived.length - 1];
@@ -25,15 +26,10 @@ export const getLastMessage = (user: UserType) => {
   return undefined;
 };
 
-const compareDates = (a: Date, b: Date) =>
-  a.getFullYear() === b.getFullYear() &&
-  a.getMonth() === b.getMonth() &&
-  a.getDate() === b.getDate();
-
 export const getMessageTime = (date: Date) => {
   const now = new Date();
 
-  if (compareDates(date, now)) {
+  if (isSameDay(date, now)) {
     return date.toLocaleTimeString("es-ES", {
       hour: "2-digit",
       minute: "2-digit",
@@ -42,7 +38,7 @@ export const getMessageTime = (date: Date) => {
 
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  if (compareDates(date, yesterday)) {
+  if (isSameDay(date, yesterday)) {
     return "Yesterday";
   }
 

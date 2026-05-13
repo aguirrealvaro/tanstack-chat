@@ -1,4 +1,4 @@
-import { compareDates } from "@/utils";
+import { isSameDay } from "date-fns";
 
 export const getMessageTime = (date: Date) => {
   const time = date.toLocaleTimeString("es-ES", {
@@ -8,13 +8,13 @@ export const getMessageTime = (date: Date) => {
 
   const now = new Date();
 
-  if (compareDates(date, now)) {
+  if (isSameDay(date, now)) {
     return time;
   }
 
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  if (compareDates(date, yesterday)) {
+  if (isSameDay(date, yesterday)) {
     return `Yesterday ${time}`;
   }
 
