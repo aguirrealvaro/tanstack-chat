@@ -6,7 +6,7 @@ import { Messages } from "./messages";
 import { InputMessage } from "./input-message";
 import { cn } from "@/lib/utils";
 
-const styles = cn("flex flex-1 items-center justify-center");
+const styles = cn("flex flex-1 items-center justify-center text-center");
 
 export const ChatPanel = () => {
   const { data: users } = useSuspenseQuery(usersQueryOptions());

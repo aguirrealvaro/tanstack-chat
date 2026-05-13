@@ -1,25 +1,15 @@
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { Route as HomeRoute } from "@/routes/index";
-import { getLastMessage } from "./utils";
+import { getLastMessage, getMessageTime } from "./utils";
 import type { UserType } from "./types";
-
-const getMessageTime = (date: Date) => {
-  return date.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
 
 export const UserButton = ({ user }: { user: UserType }) => {
   const { currentUser } = HomeRoute.useRouteContext();
 
   const lastMessage = getLastMessage(user);
-
   const isLastMessageFromCurrentUser = lastMessage?.fromId === currentUser.id;
-
   const isLastMessageUnseen = !isLastMessageFromCurrentUser && !lastMessage?.seen;
-
   const unseenMessages = user.messagesSent.filter((message) => !message.seen).length;
   const showUnseenMessages = !isLastMessageFromCurrentUser && unseenMessages > 0;
 
