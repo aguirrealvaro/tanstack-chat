@@ -47,12 +47,12 @@ export const Messages = () => {
             className={cn(
               "flex flex-row gap-4 rounded-lg p-2 text-sm",
               isUserMessage
-                ? cn("self-end", "bg-foreground text-background")
-                : cn("self-start", "bg-muted text-foreground"),
+                ? cn("ml-4 self-end", "bg-foreground text-background")
+                : cn("mr-4 self-start", "bg-muted text-foreground"),
             )}
           >
             <span>{message.text}</span>
-            <span className="translate-y-0.5 self-end text-xs text-muted-foreground">
+            <span className="shrink-0 translate-y-0.5 self-end text-xs text-muted-foreground">
               {getMessageTime(message.createdAt)}
             </span>
           </div>
