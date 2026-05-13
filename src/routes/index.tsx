@@ -49,7 +49,7 @@ function Home() {
             <Contacts />
           </Suspense>
         </div>
-        <div className={cn("flex-2 flex-col p-4 sm:flex", isSelectedUser ? "" : "hidden")}>
+        <div className={cn("flex-2 flex-col p-4 sm:flex", isSelectedUser ? "flex" : "hidden")}>
           <Suspense
             fallback={
               <div className="flex flex-1 flex-col gap-4">
