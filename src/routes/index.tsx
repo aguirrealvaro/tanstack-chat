@@ -24,10 +24,18 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { user: selectedUser } = Route.useSearch();
+  const isSelectedUser = !!selectedUser;
+
   return (
     <>
       <main className="m-4 flex h-full rounded border bg-card text-card-foreground shadow">
-        <div className="flex flex-1 flex-col border-r p-4">
+        <div
+          className={cn(
+            "flex-1 flex-col border-r p-4 sm:flex",
+            isSelectedUser ? "hidden" : "",
+          )}
+        >
           <UserLoggedIn />
           <Suspense
             fallback={
@@ -41,7 +49,7 @@ function Home() {
             <Contacts />
           </Suspense>
         </div>
-        <div className="flex flex-2 flex-col p-4">
+        <div className={cn("flex-2 flex-col p-4 sm:flex", isSelectedUser ? "" : "hidden")}>
           <Suspense
             fallback={
               <div className="flex flex-1 flex-col gap-4">
