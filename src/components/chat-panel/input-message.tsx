@@ -1,57 +1,12 @@
-import { sendMessage } from "@/server-fns";
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Message } from "@/generated/prisma/client";
-
-type SendMessageMutation = {
-  message: string;
-  selectedUser: number;
-};
+import { useSendMessageMutation } from "@/mutations/send-message";
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
-  const { currentUser } = HomeRoute.useRouteContext();
-  const queryClient = useQueryClient();
 
-  const sendMessageMutation = useMutation({
-    mutationFn: ({ message, selectedUser: toUserId }: SendMessageMutation) =>
-      sendMessage({ data: { message, selectedUser: toUserId } }),
-    onMutate: async (data) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ["chat", data.selectedUser] });
-
-      const previousMessages = queryClient.getQueryData<Message[]>([
-        "chat",
-        data.selectedUser,
-      ]);
-
-      const newMessage: Message = {
-        id: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        text: data.message,
-        fromId: currentUser.id,
-        toId: data.selectedUser,
-        seen: false,
-      };
-
-      const newMessages = previousMessages ? [...previousMessages, newMessage] : [newMessage];
-
-      queryClient.setQueryData(["chat", data.selectedUser], newMessages);
-
-      return { previousMessages };
-    },
-    onError: (_error, data, context) => {
-      if (!context) return;
-      queryClient.setQueryData(["chat", data.selectedUser], context.previousMessages);
-    },
-    onSuccess: (_response, data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["chat", data.selectedUser] });
-    },
-  });
+  const { mutate, isPending } = useSendMessageMutation();
 
   if (!selectedUser) return null;
 
@@ -63,7 +18,7 @@ export const InputMessage = () => {
 
     if (!message) return;
 
-    sendMessageMutation.mutate(
+    mutate(
       { message, selectedUser },
       {
         onSuccess: () => {
@@ -83,7 +38,7 @@ export const InputMessage = () => {
       />
       <button
         type="submit"
-        disabled={sendMessageMutation.isPending}
+        disabled={isPending}
         className={cn(
           "bg-foreground text-background",
           "rounded px-4 py-2",
