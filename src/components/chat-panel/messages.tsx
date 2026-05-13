@@ -4,6 +4,7 @@ import { Route as HomeRoute } from "@/routes/index";
 import { chatQueryOptions } from "@/queries/chat";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
+import { getMessageTime } from "./utils";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,13 +45,16 @@ export const Messages = () => {
           <div
             key={message.id}
             className={cn(
-              "rounded-lg p-2 text-sm",
+              "flex flex-row gap-4 rounded-lg p-2 text-sm",
               isUserMessage
                 ? cn("self-end", "bg-foreground text-background")
                 : cn("self-start", "bg-muted text-foreground"),
             )}
           >
-            {message.text}
+            <span>{message.text}</span>
+            <span className="translate-y-0.5 self-end text-xs text-muted-foreground">
+              {getMessageTime(message.createdAt)}
+            </span>
           </div>
         );
       })}
