@@ -8,6 +8,6 @@ export const chatQueryOptions = (selectedUser?: number) =>
       if (!selectedUser) return [];
       return getChat({ data: selectedUser });
     },
-    refetchInterval: 10 * 1000, // 10 seconds
+    refetchInterval: import.meta.env.PROD ? 10 * 1000 : false,
     enabled: Boolean(selectedUser),
   });
