@@ -46,7 +46,11 @@ export const UserButton = ({ user }: { user: UserType }) => {
         className="rounded-full"
       />
       <div className="flex w-full items-center justify-between gap-4">
-        <div className={cn("flex flex-col items-start", { "font-bold": isLastMessageUnseen })}>
+        <div
+          className={cn("flex min-w-0 flex-col items-start", {
+            "font-bold": isLastMessageUnseen,
+          })}
+        >
           <span>{user.firstName}</span>
           {lastMessage && (
             <div className="flex items-center gap-2">
@@ -56,7 +60,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
                   {lastMessage.seen && <Check size={13} className="-ml-2" />}
                 </div>
               )}
-              <span className="text-left text-sm text-muted-foreground">
+              <span className="line-clamp-2 min-w-0 text-left text-sm text-muted-foreground">
                 {lastMessage.text}
               </span>
             </div>
