@@ -33,8 +33,7 @@ export const Messages = () => {
 
   return (
     <div
-      className="-mr-4 flex h-0 flex-col gap-2 overflow-y-auto pr-4 break-all"
-      style={{ flex: "1 1 auto" }}
+      className="-mr-4 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-4 break-all"
       ref={containerRef}
     >
       {chat.map((message) => {
