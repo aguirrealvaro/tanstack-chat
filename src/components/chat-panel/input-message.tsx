@@ -2,26 +2,45 @@ import { sendMessage } from "@/server-fns";
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+type SendMessageMutation = {
+  message: string;
+  selectedUser: number;
+};
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
   const queryClient = useQueryClient();
 
+  const sendMessageMutation = useMutation({
+    mutationFn: ({ message, selectedUser: toUserId }: SendMessageMutation) =>
+      sendMessage({ data: { message, selectedUser: toUserId } }),
+    onSuccess: (_response, data) => {
+      const { selectedUser: toUserId } = data;
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["chat", toUserId] });
+    },
+  });
+
   if (!selectedUser) return null;
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const message = formData.get("message") as string;
+    const message = (formData.get("message") as string).trim();
 
-    if (!message.trim()) return;
+    if (!message) return;
 
-    await sendMessage({ data: { message, selectedUser } });
-    form.reset();
-    queryClient.invalidateQueries({ queryKey: ["users"] });
-    queryClient.invalidateQueries({ queryKey: ["chat", selectedUser] });
+    sendMessageMutation.mutate(
+      { message, selectedUser },
+      {
+        onSuccess: () => {
+          form.reset();
+        },
+      },
+    );
   };
 
   return (
@@ -34,6 +53,7 @@ export const InputMessage = () => {
       />
       <button
         type="submit"
+        disabled={sendMessageMutation.isPending}
         className={cn(
           "bg-foreground text-background",
           "rounded px-4 py-2",
