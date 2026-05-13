@@ -5,6 +5,7 @@ import { chatQueryOptions } from "@/queries/chat";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getMessageTime } from "./utils";
+import { Check } from "lucide-react";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,9 +53,15 @@ export const Messages = () => {
             )}
           >
             <span>{message.text}</span>
-            <span className="shrink-0 translate-y-0.5 self-end text-xs text-muted-foreground">
-              {getMessageTime(message.createdAt)}
-            </span>
+            <div className="flex shrink-0 translate-y-0.5 items-center gap-2 self-end text-xs text-muted-foreground">
+              <span>{getMessageTime(message.createdAt)}</span>
+              {isUserMessage && (
+                <div className="flex shrink-0 items-center">
+                  <Check size={13} />
+                  {message.seen && <Check size={13} className="-ml-2" />}
+                </div>
+              )}
+            </div>
           </div>
         );
       })}
