@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Route as HomeRoute } from "@/routes/index";
 import { getLastMessage, getMessageTime } from "./utils";
 import type { UserType } from "./types";
+import { DoubleCheck } from "../double-check";
 
 export const UserButton = ({ user }: { user: UserType }) => {
   const { currentUser } = HomeRoute.useRouteContext();
@@ -44,12 +45,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
           <span>{user.firstName}</span>
           {lastMessage && (
             <div className="flex items-center gap-2">
-              {isLastMessageFromCurrentUser && (
-                <div className="flex shrink-0 items-center">
-                  <Check size={13} />
-                  {lastMessage.seen && <Check size={13} className="-ml-2" />}
-                </div>
-              )}
+              {isLastMessageFromCurrentUser && <DoubleCheck seen={lastMessage.seen} />}
               <span className="line-clamp-2 min-w-0 text-left text-sm text-muted-foreground">
                 {lastMessage.text}
               </span>
