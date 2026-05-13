@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
 import { Route as HomeRoute } from "@/routes/index";
 import { getLastMessage, getMessageTime } from "./utils";
 import type { UserType } from "./types";
