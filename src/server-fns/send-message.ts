@@ -11,7 +11,7 @@ export const sendMessage = createServerFn({ method: "POST" })
       selectedUser: z.number(),
     }),
   )
-  .handler(async ({ data: { message, selectedUser }, context: { currentUser } }) => {
+  .handler(async ({ data: { message, selectedUser }, context: { loggedInUser } }) => {
     // Dev only: send exactly "/sim-error" to test optimistic rollback (onError).
     if (import.meta.env.DEV && message.trim() === "/force-error") {
       throw new Error("Simulated send failure");
@@ -20,7 +20,7 @@ export const sendMessage = createServerFn({ method: "POST" })
     await prisma.message.create({
       data: {
         text: message,
-        fromId: currentUser.id,
+        fromId: loggedInUser.id,
         toId: selectedUser,
       },
     });

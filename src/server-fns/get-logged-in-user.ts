@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "./auth-middleware";
 
-export const getCurrentUser = createServerFn()
+export const getLoggedInUser = createServerFn()
   .middleware([authMiddleware])
-  .handler(async ({ context: { currentUser } }) => {
-    return currentUser;
+  .handler(async ({ context: { loggedInUser } }) => {
+    return loggedInUser;
   });

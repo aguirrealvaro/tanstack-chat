@@ -5,18 +5,18 @@ import { authMiddleware } from "./auth-middleware";
 
 export const getUsers = createServerFn()
   .middleware([authMiddleware])
-  .handler(async ({ context: { currentUser } }) => {
+  .handler(async ({ context: { loggedInUser } }) => {
     // await sleep(10000);
     const users = await prisma.user.findMany({
       include: {
         messagesReceived: {
-          where: { fromId: currentUser.id },
+          where: { fromId: loggedInUser.id },
           orderBy: {
             createdAt: "asc",
           },
         },
         messagesSent: {
-          where: { toId: currentUser.id },
+          where: { toId: loggedInUser.id },
           orderBy: {
             createdAt: "asc",
           },
@@ -24,7 +24,7 @@ export const getUsers = createServerFn()
       },
       where: {
         id: {
-          not: { equals: currentUser.id },
+          not: { equals: loggedInUser.id },
         },
       },
     });

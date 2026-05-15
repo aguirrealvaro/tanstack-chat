@@ -10,11 +10,11 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
     throw redirect({ to: "/sign-in" });
   }
 
-  const currentUser = await prisma.user.findUnique({ where: { clerkId: userId } });
+  const loggedInUser = await prisma.user.findUnique({ where: { clerkId: userId } });
 
-  if (!currentUser) {
-    throw new Error("No current user");
+  if (!loggedInUser) {
+    throw new Error("No logged-in user");
   }
 
-  return next({ context: { currentUser } });
+  return next({ context: { loggedInUser } });
 });

@@ -1,5 +1,5 @@
 import { Contacts, UserLoggedIn, ChatPanel, Footer } from "@/components";
-import { getCurrentUser } from "@/server-fns";
+import { getLoggedInUser } from "@/server-fns";
 import { usersQueryOptions, chatQueryOptions } from "@/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
-    const currentUser = await getCurrentUser();
-    return { currentUser };
+    const loggedInUser = await getLoggedInUser();
+    return { loggedInUser };
   },
   component: Home,
   validateSearch: (search: Record<string, unknown>) => ({

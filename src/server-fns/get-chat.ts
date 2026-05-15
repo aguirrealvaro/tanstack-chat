@@ -7,18 +7,18 @@ import { authMiddleware } from "./auth-middleware";
 export const getChat = createServerFn()
   .middleware([authMiddleware])
   .inputValidator(z.number())
-  .handler(async ({ data: userSelected, context: { currentUser } }) => {
+  .handler(async ({ data: userSelected, context: { loggedInUser } }) => {
     // await sleep(5000);
     await prisma.message.updateMany({
-      where: { fromId: Number(userSelected), toId: currentUser.id },
+      where: { fromId: Number(userSelected), toId: loggedInUser.id },
       data: { seen: true },
     });
 
     const chat = await prisma.message.findMany({
       where: {
         OR: [
-          { fromId: currentUser.id, toId: userSelected },
-          { fromId: userSelected, toId: currentUser.id },
+          { fromId: loggedInUser.id, toId: userSelected },
+          { fromId: userSelected, toId: loggedInUser.id },
         ],
       },
       orderBy: {

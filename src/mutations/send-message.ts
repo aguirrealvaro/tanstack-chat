@@ -11,7 +11,7 @@ type SendMessageMutation = {
 
 export const useSendMessageMutation = () => {
   const queryClient = useQueryClient();
-  const { currentUser } = HomeRoute.useRouteContext();
+  const { loggedInUser } = HomeRoute.useRouteContext();
 
   const optimisticUpdateMessages = async (data: SendMessageMutation) => {
     // Cancel any outgoing refetches
@@ -24,7 +24,7 @@ export const useSendMessageMutation = () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       text: data.message,
-      fromId: currentUser.id,
+      fromId: loggedInUser.id,
       toId: data.selectedUser,
       seen: false,
     };

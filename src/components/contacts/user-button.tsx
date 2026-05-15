@@ -5,13 +5,13 @@ import type { UserType } from "./types";
 import { DoubleCheck } from "../double-check";
 
 export const UserButton = ({ user }: { user: UserType }) => {
-  const { currentUser } = HomeRoute.useRouteContext();
+  const { loggedInUser } = HomeRoute.useRouteContext();
 
   const lastMessage = getLastMessage(user);
-  const isLastMessageFromCurrentUser = lastMessage?.fromId === currentUser.id;
-  const isLastMessageUnseen = !isLastMessageFromCurrentUser && !lastMessage?.seen;
+  const isLastMessageFromLoggedInUser = lastMessage?.fromId === loggedInUser.id;
+  const isLastMessageUnseen = !isLastMessageFromLoggedInUser && !lastMessage?.seen;
   const unseenMessages = user.messagesSent.filter((message) => !message.seen).length;
-  const showUnseenMessages = !isLastMessageFromCurrentUser && unseenMessages > 0;
+  const showUnseenMessages = !isLastMessageFromLoggedInUser && unseenMessages > 0;
 
   const navigate = HomeRoute.useNavigate();
 
@@ -44,7 +44,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
           <span>{user.firstName}</span>
           {lastMessage && (
             <div className="flex items-center gap-2">
-              {isLastMessageFromCurrentUser && <DoubleCheck seen={lastMessage.seen} />}
+              {isLastMessageFromLoggedInUser && <DoubleCheck seen={lastMessage.seen} />}
               <span className="line-clamp-2 min-w-0 text-left text-sm text-muted-foreground">
                 {lastMessage.text}
               </span>
