@@ -9,6 +9,7 @@ type DeleteMessageMutation = {
 export const useDeleteMessageMutation = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ messageId }: DeleteMessageMutation) =>
       deleteMessage({ data: { messageId } }),

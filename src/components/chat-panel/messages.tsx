@@ -46,7 +46,7 @@ export const Messages = () => {
 
   const { containerRef } = useAutoScroll(chat);
 
-  const { mutate } = useDeleteMessageMutation();
+  const { mutate, isPending } = useDeleteMessageMutation();
 
   const handleDeleteMessage = (messageId: number | null) => {
     if (!messageId) return;
@@ -104,7 +104,7 @@ export const Messages = () => {
         );
       })}
       <AlertDialog
-        open={Boolean(messageIdToDelete)}
+        open={Boolean(messageIdToDelete) || isPending}
         onOpenChange={(open) => {
           if (!open) setMessageIdToDelete(null);
         }}
@@ -122,8 +122,9 @@ export const Messages = () => {
               onClick={() => {
                 handleDeleteMessage(messageIdToDelete);
               }}
+              disabled={isPending}
             >
-              Continue
+              {isPending ? "Deleting..." : "Continue"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
