@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
 import { chatQueryOptions } from "@/queries/chat";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMessageTime } from "./utils";
 import { DoubleCheck } from "../double-check";
 import { ChevronDown } from "lucide-react";
@@ -13,6 +13,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +41,7 @@ export const Messages = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
   const { loggedInUser } = HomeRoute.useRouteContext();
   const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
+  const [messageIdToDelete, setMessageIdToDelete] = useState<number | null>(null);
 
   const { containerRef } = useAutoScroll(chat);
 
@@ -73,12 +84,43 @@ export const Messages = () => {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" sideOffset={4}>
-                <DropdownMenuItem>Eliminar</DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={() => setMessageIdToDelete(message.id)}
+                >
+                  Eliminar
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         );
       })}
+      <AlertDialog
+        open={Boolean(messageIdToDelete)}
+        onOpenChange={(open) => {
+          if (!open) setMessageIdToDelete(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your message.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                // eslint-disable-next-line no-console
+                console.log("delete message", messageIdToDelete);
+              }}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
