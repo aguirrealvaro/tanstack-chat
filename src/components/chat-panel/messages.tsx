@@ -9,12 +9,13 @@ import { DoubleCheck } from "../double-check";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastId = chat.at(-1)?.id;
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [chat]);
+  }, [lastId]);
 
   return { containerRef };
 };
