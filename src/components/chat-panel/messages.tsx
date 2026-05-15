@@ -6,6 +6,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getMessageTime } from "./utils";
 import { DoubleCheck } from "../double-check";
+import { ArrowDown, ChevronDown } from "lucide-react";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,7 @@ export const Messages = () => {
           <div
             key={message.id}
             className={cn(
+              "group relative",
               "flex flex-row gap-4 rounded-lg p-2 text-sm",
               isUserMessage
                 ? cn("ml-4 self-end", "bg-foreground text-background")
@@ -51,6 +53,9 @@ export const Messages = () => {
               <span>{getMessageTime(message.createdAt)}</span>
               {isUserMessage && <DoubleCheck seen={message.seen} />}
             </div>
+            <button className="absolute top-1/2 right-2 hidden -translate-y-1/2 cursor-pointer group-hover:block">
+              <ChevronDown size={20} />
+            </button>
           </div>
         );
       })}
