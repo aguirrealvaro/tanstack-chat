@@ -17,7 +17,7 @@ export const sendMessage = createServerFn({ method: "POST" })
       throw new Error("Simulated send failure");
     }
 
-    await prisma.message.create({
+    const newMessage = await prisma.message.create({
       data: {
         text: message,
         fromId: loggedInUser.id,
@@ -27,5 +27,6 @@ export const sendMessage = createServerFn({ method: "POST" })
 
     return {
       status: `Message: '${message}' sent`,
+      newMessage,
     };
   });
