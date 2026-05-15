@@ -2,7 +2,7 @@ import type { Message } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
 import { chatQueryOptions } from "@/queries/chat";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getMessageTime } from "./utils";
 import { DoubleCheck } from "../double-check";
@@ -25,14 +25,7 @@ export const Messages = () => {
   const { currentUser } = HomeRoute.useRouteContext();
   const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
 
-  const queryClient = useQueryClient();
-
   const { containerRef } = useAutoScroll(chat);
-
-  useEffect(() => {
-    // invalidate users query to refresh the unseen messages
-    queryClient.invalidateQueries({ queryKey: ["users"] });
-  }, [selectedUser]);
 
   return (
     <div
