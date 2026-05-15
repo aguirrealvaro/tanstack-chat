@@ -23,6 +23,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { useDeleteMessageMutation } from "@/mutations/delete-message";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +45,13 @@ export const Messages = () => {
   const [messageIdToDelete, setMessageIdToDelete] = useState<number | null>(null);
 
   const { containerRef } = useAutoScroll(chat);
+
+  const { mutate } = useDeleteMessageMutation();
+
+  const handleDeleteMessage = (messageId: number | null) => {
+    if (!messageId) return;
+    mutate({ messageId });
+  };
 
   return (
     <div
@@ -112,8 +120,7 @@ export const Messages = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                // eslint-disable-next-line no-console
-                console.log("delete message", messageIdToDelete);
+                handleDeleteMessage(messageIdToDelete);
               }}
             >
               Continue
