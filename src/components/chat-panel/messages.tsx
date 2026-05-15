@@ -6,7 +6,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { getMessageTime } from "./utils";
 import { DoubleCheck } from "../double-check";
-import { ArrowDown, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import {
+  DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,9 +59,23 @@ export const Messages = () => {
               <span>{getMessageTime(message.createdAt)}</span>
               {isUserMessage && <DoubleCheck seen={message.seen} />}
             </div>
-            <button className="absolute top-1/2 right-2 hidden -translate-y-1/2 cursor-pointer group-hover:block">
-              <ChevronDown size={20} />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "absolute top-1/2 right-2 z-10 -translate-y-1/2 cursor-pointer",
+                    "pointer-events-none opacity-0",
+                    "group-hover:pointer-events-auto group-hover:opacity-100",
+                  )}
+                >
+                  <ChevronDown size={20} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" sideOffset={4}>
+                <DropdownMenuItem>Eliminar</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         );
       })}
