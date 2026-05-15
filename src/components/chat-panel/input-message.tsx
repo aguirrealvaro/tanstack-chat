@@ -18,14 +18,11 @@ export const InputMessage = () => {
 
     if (!message) return;
 
-    mutate(
-      { message, selectedUser },
-      {
-        onSuccess: () => {
-          form.reset();
-        },
-      },
-    );
+    const resetForm = () => {
+      form.reset();
+    };
+
+    mutate({ message, selectedUser, resetForm });
   };
 
   return (

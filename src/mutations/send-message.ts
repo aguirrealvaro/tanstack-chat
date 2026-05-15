@@ -6,6 +6,7 @@ import { Route as HomeRoute } from "@/routes/index";
 type SendMessageMutation = {
   message: string;
   selectedUser: number;
+  resetForm: () => void;
 };
 
 export const useSendMessageMutation = () => {
@@ -33,6 +34,8 @@ export const useSendMessageMutation = () => {
       : [messageToAdd];
 
     queryClient.setQueryData(["chat", data.selectedUser], newMessages);
+
+    data.resetForm();
 
     return { previousMessages };
   };
