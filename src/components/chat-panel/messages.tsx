@@ -24,6 +24,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { useDeleteMessageMutation } from "@/mutations/delete-message";
+import { useLongPress } from "use-long-press";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +44,7 @@ export const Messages = () => {
   const { loggedInUser } = HomeRoute.useRouteContext();
   const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
   const [messageIdToDelete, setMessageIdToDelete] = useState<number | null>(null);
+  const [openMenuMessageId, setOpenMenuMessageId] = useState<number | null>(null);
 
   const { containerRef } = useAutoScroll(chat);
 
@@ -52,6 +54,12 @@ export const Messages = () => {
     if (!messageId) return;
     mutate({ messageId });
   };
+
+  const bindLongPress = useLongPress<HTMLDivElement, number>((_, { context }) => {
+    if (context) {
+      setOpenMenuMessageId(context);
+    }
+  });
 
   return (
     <div
@@ -65,6 +73,7 @@ export const Messages = () => {
         return (
           <div
             key={message.id}
+            {...(isUserMessage ? bindLongPress(message.id) : {})}
             className={cn(
               "group relative",
               "flex flex-row gap-4 rounded-lg p-2 text-sm",
@@ -79,7 +88,12 @@ export const Messages = () => {
               {isUserMessage && <DoubleCheck seen={message.seen} />}
             </div>
             {isUserMessage && (
-              <DropdownMenu>
+              <DropdownMenu
+                open={openMenuMessageId === message.id}
+                onOpenChange={(open) => {
+                  setOpenMenuMessageId(open ? message.id : null);
+                }}
+              >
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
