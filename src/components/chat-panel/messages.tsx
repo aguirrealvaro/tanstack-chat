@@ -69,9 +69,8 @@ export const Messages = () => {
     }
   });
 
-  const [editedInputValue, setEditedInputValue] = useState<string>(
-    () => chat.find((message) => message.id === editAlertMessageId)?.text || "",
-  );
+  const [editedInputValue, setEditedInputValue] = useState<string>("");
+  console.log({ editedInputValue });
 
   return (
     <div
@@ -119,7 +118,16 @@ export const Messages = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={4}>
-                  <DropdownMenuItem onSelect={() => setEditAlertMessageId(message.id)}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setEditAlertMessageId(message.id);
+
+                      const messagedToEdit =
+                        chat.find(({ id }) => id === message.id)?.text || "";
+
+                      setEditedInputValue(messagedToEdit);
+                    }}
+                  >
                     <Edit /> Editar
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -138,7 +146,7 @@ export const Messages = () => {
 
       {/* Edit Alert Dialog */}
       <AlertDialog
-        open={Boolean(editAlertMessageId)}
+        open={Boolean(editAlertMessageId) || isEditing}
         onOpenChange={(open) => {
           if (!open) setEditAlertMessageId(null);
         }}
