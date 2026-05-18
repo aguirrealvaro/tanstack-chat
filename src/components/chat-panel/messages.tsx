@@ -78,28 +78,30 @@ export const Messages = () => {
               <span>{getMessageTime(message.createdAt)}</span>
               {isUserMessage && <DoubleCheck seen={message.seen} />}
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={cn(
-                    "absolute top-1/2 right-2 z-10 -translate-y-1/2 cursor-pointer",
-                    "pointer-events-none opacity-0",
-                    "group-hover:pointer-events-auto group-hover:opacity-100",
-                  )}
-                >
-                  <ChevronDown size={20} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" sideOffset={4}>
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={() => setMessageIdToDelete(message.id)}
-                >
-                  Eliminar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {isUserMessage && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      "absolute top-1/2 right-2 z-10 -translate-y-1/2 cursor-pointer",
+                      "pointer-events-none opacity-0",
+                      "group-hover:pointer-events-auto group-hover:opacity-100",
+                    )}
+                  >
+                    <ChevronDown size={20} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" sideOffset={4}>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => setMessageIdToDelete(message.id)}
+                  >
+                    Eliminar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         );
       })}
