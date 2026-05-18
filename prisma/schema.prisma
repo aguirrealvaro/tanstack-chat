@@ -26,6 +26,7 @@ model Message {
   updatedAt DateTime @updatedAt
   text      String   @db.Text
   seen      Boolean  @default(false)
+  edited    Boolean  @default(false)
 
   from   User @relation("MessageFrom", fields: [fromId], references: [id])
   fromId Int

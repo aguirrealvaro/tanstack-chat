@@ -20,7 +20,7 @@ export const editMessage = createServerFn({ method: "POST" })
 
     const editedMessage = await prisma.message.update({
       where: { id: messageId },
-      data: { text: newMessageValue },
+      data: { text: newMessageValue, edited: true },
     });
 
     return { message: "Message edited", editedMessage };

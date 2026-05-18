@@ -66,6 +66,7 @@ export const Messages = () => {
           >
             <span>{message.text}</span>
             <div className="flex shrink-0 translate-y-0.5 items-center gap-2 self-end text-xs text-muted-foreground">
+              {message.edited && <span>Edited</span>}
               <span>{getMessageTime(message.createdAt)}</span>
               {isUserMessage && <DoubleCheck seen={message.seen} />}
             </div>
