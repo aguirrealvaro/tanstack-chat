@@ -2,7 +2,13 @@ import { ClerkProvider as DefaultClerkProvider } from "@clerk/tanstack-react-sta
 
 export const ClerkProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <DefaultClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up" afterSignOutUrl="/">
+    <DefaultClerkProvider
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      signInFallbackRedirectUrl="/"
+      signUpFallbackRedirectUrl="/"
+      afterSignOutUrl="/"
+    >
       {children}
     </DefaultClerkProvider>
   );

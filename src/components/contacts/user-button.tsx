@@ -52,7 +52,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
           )}
         </div>
         {lastMessage && (
-          <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
+          <div className="flex flex-col items-end gap-1 text-sm text-muted-foreground">
             <span>{getMessageTime(lastMessage.createdAt)}</span>
             {showUnseenMessages && (
               <span
