@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useDeleteMessageMutation } from "@/mutations/delete-message";
 import { useLongPress } from "use-long-press";
+import { useEditMessageMutation } from "@/mutations/edit-message";
 
 const useAutoScroll = (chat: Message[]) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,11 +51,16 @@ export const Messages = () => {
 
   const { containerRef } = useAutoScroll(chat);
 
-  const { mutate, isPending: isDeleting } = useDeleteMessageMutation();
+  const { mutate: mutateEditMessage, isPending: isEditing } = useEditMessageMutation();
+  const handleEditMessage = (messageId: number | null, newMessageValue: string) => {
+    if (!messageId) return;
+    mutateEditMessage({ messageId, newMessageValue });
+  };
 
+  const { mutate: mutateDeleteMessage, isPending: isDeleting } = useDeleteMessageMutation();
   const handleDeleteMessage = (messageId: number | null) => {
     if (!messageId) return;
-    mutate({ messageId });
+    mutateDeleteMessage({ messageId });
   };
 
   const bindLongPress = useLongPress<HTMLDivElement, number>((_, { context }) => {
@@ -152,7 +158,12 @@ export const Messages = () => {
 
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Edit</AlertDialogAction>
+            <AlertDialogAction
+              onClick={() => handleEditMessage(editAlertMessageId, "new message value")}
+              disabled={isEditing}
+            >
+              {isEditing ? "Editing..." : "Edit"}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
