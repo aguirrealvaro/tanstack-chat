@@ -43,8 +43,11 @@ export const Messages = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
   const { loggedInUser } = HomeRoute.useRouteContext();
   const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
-  const [messageIdToDelete, setMessageIdToDelete] = useState<number | null>(null);
-  const [openMenuMessageId, setOpenMenuMessageId] = useState<number | null>(null);
+
+  const [dropdownMessageId, setDropdownMessageId] = useState<number | null>(null);
+  const [alertMessageId, setAlertMessageId] = useState<number | null>(null);
+
+  console.log({ dropdownMessageId, alertMessageId });
 
   const { containerRef } = useAutoScroll(chat);
 
@@ -57,7 +60,7 @@ export const Messages = () => {
 
   const bindLongPress = useLongPress<HTMLDivElement, number>((_, { context }) => {
     if (context) {
-      setOpenMenuMessageId(context);
+      setDropdownMessageId(context);
     }
   });
 
@@ -89,9 +92,9 @@ export const Messages = () => {
             </div>
             {isUserMessage && (
               <DropdownMenu
-                open={openMenuMessageId === message.id}
+                open={dropdownMessageId === message.id}
                 onOpenChange={(open) => {
-                  setOpenMenuMessageId(open ? message.id : null);
+                  setDropdownMessageId(open ? message.id : null);
                 }}
               >
                 <DropdownMenuTrigger asChild>
@@ -109,7 +112,7 @@ export const Messages = () => {
                 <DropdownMenuContent align="end" sideOffset={4}>
                   <DropdownMenuItem
                     variant="destructive"
-                    onSelect={() => setMessageIdToDelete(message.id)}
+                    onSelect={() => setAlertMessageId(message.id)}
                   >
                     Eliminar
                   </DropdownMenuItem>
@@ -120,9 +123,9 @@ export const Messages = () => {
         );
       })}
       <AlertDialog
-        open={Boolean(messageIdToDelete) || isPending}
+        open={Boolean(alertMessageId) || isPending}
         onOpenChange={(open) => {
-          if (!open) setMessageIdToDelete(null);
+          if (!open) setAlertMessageId(null);
         }}
       >
         <AlertDialogContent>
@@ -136,7 +139,7 @@ export const Messages = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                handleDeleteMessage(messageIdToDelete);
+                handleDeleteMessage(alertMessageId);
               }}
               disabled={isPending}
             >
