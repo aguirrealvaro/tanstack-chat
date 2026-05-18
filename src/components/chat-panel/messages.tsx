@@ -69,7 +69,9 @@ export const Messages = () => {
     }
   });
 
-  const editedMessageValue = chat.find((message) => message.id === editAlertMessageId)?.text;
+  const [editedInputValue, setEditedInputValue] = useState<string>(
+    () => chat.find((message) => message.id === editAlertMessageId)?.text || "",
+  );
 
   return (
     <div
@@ -152,15 +154,19 @@ export const Messages = () => {
               name="message"
               placeholder="Type a message..."
               className="w-full flex-1 rounded border bg-transparent p-2 text-primary"
-              defaultValue={editedMessageValue}
+              value={editedInputValue}
+              onChange={(e) => setEditedInputValue(e.target.value)}
             />
           </AlertDialogDescription>
 
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => handleEditMessage(editAlertMessageId, "new message value")}
-              disabled={isEditing}
+              onClick={() => {
+                if (!editedInputValue) return;
+                handleEditMessage(editAlertMessageId, editedInputValue);
+              }}
+              disabled={isEditing || !editedInputValue}
             >
               {isEditing ? "Editing..." : "Edit"}
             </AlertDialogAction>
