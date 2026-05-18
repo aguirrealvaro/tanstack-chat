@@ -1,4 +1,4 @@
-import { usersQueryOptions } from "@/queries/users";
+import { usersQueryOptions } from "@/queries";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { UserButton } from "./user-button";
 

@@ -1,7 +1,7 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
-import { useSendMessageMutation } from "@/mutations/send-message";
+import { useSendMessageMutation } from "@/mutations";
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();

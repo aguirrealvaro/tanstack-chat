@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useEditMessageMutation } from "@/mutations/edit-message";
+import { useEditMessageMutation } from "@/mutations";
 
 type EditMessageDialogProps = {
   messageId: number | null;

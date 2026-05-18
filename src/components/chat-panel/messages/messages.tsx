@@ -1,7 +1,7 @@
 import type { Message } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { Route as HomeRoute } from "@/routes/index";
-import { chatQueryOptions } from "@/queries/chat";
+import { chatQueryOptions } from "@/queries";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { getMessageTime } from "../utils";

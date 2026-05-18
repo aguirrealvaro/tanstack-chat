@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useDeleteMessageMutation } from "@/mutations/delete-message";
+import { useDeleteMessageMutation } from "@/mutations";
 
 type DeleteMessageDialogProps = {
   messageId: number | null;
