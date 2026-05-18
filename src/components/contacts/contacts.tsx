@@ -10,7 +10,7 @@ export const Contacts = () => {
   }
 
   return (
-    <ul>
+    <ul className="flex flex-col gap-1">
       {users.map((user) => {
         return (
           <li key={user.id}>
