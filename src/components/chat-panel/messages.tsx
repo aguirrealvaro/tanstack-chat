@@ -6,7 +6,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { getMessageTime } from "./utils";
 import { DoubleCheck } from "../double-check";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Edit, Trash } from "lucide-react";
 import {
   DropdownMenuTrigger,
   DropdownMenu,
@@ -45,13 +45,12 @@ export const Messages = () => {
   const { data: chat } = useSuspenseQuery(chatQueryOptions(selectedUser));
 
   const [dropdownMessageId, setDropdownMessageId] = useState<number | null>(null);
-  const [alertMessageId, setAlertMessageId] = useState<number | null>(null);
-
-  console.log({ dropdownMessageId, alertMessageId });
+  const [deleteAlertMessageId, setDeleteAlertMessageId] = useState<number | null>(null);
+  const [editAlertMessageId, setEditAlertMessageId] = useState<number | null>(null);
 
   const { containerRef } = useAutoScroll(chat);
 
-  const { mutate, isPending } = useDeleteMessageMutation();
+  const { mutate, isPending: isDeleting } = useDeleteMessageMutation();
 
   const handleDeleteMessage = (messageId: number | null) => {
     if (!messageId) return;
@@ -63,6 +62,8 @@ export const Messages = () => {
       setDropdownMessageId(context);
     }
   });
+
+  const editedMessageValue = chat.find((message) => message.id === editAlertMessageId)?.text;
 
   return (
     <div
@@ -110,10 +111,14 @@ export const Messages = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={4}>
+                  <DropdownMenuItem onSelect={() => setEditAlertMessageId(message.id)}>
+                    <Edit /> Editar
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
-                    onSelect={() => setAlertMessageId(message.id)}
+                    onSelect={() => setDeleteAlertMessageId(message.id)}
                   >
+                    <Trash />
                     Eliminar
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -122,28 +127,60 @@ export const Messages = () => {
           </div>
         );
       })}
+
+      {/* Edit Alert Dialog */}
       <AlertDialog
-        open={Boolean(alertMessageId) || isPending}
+        open={Boolean(editAlertMessageId)}
         onOpenChange={(open) => {
-          if (!open) setAlertMessageId(null);
+          if (!open) setEditAlertMessageId(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Edit message</AlertDialogTitle>
+          </AlertDialogHeader>
+
+          <AlertDialogDescription>
+            <input
+              type="text"
+              name="message"
+              placeholder="Type a message..."
+              className="w-full flex-1 rounded border bg-transparent p-2 text-primary"
+              defaultValue={editedMessageValue}
+            />
+          </AlertDialogDescription>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Edit</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Alert Dialog */}
+      <AlertDialog
+        open={Boolean(deleteAlertMessageId) || isDeleting}
+        onOpenChange={(open) => {
+          if (!open) setDeleteAlertMessageId(null);
         }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your message.
+              This action cannot be undone. This will permanently edit your message.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                handleDeleteMessage(alertMessageId);
+                handleDeleteMessage(deleteAlertMessageId);
               }}
-              disabled={isPending}
+              disabled={isDeleting}
+              variant="destructive"
             >
-              {isPending ? "Deleting..." : "Continue"}
+              {isDeleting ? "Deleting..." : "Continue"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
