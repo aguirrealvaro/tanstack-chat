@@ -70,7 +70,6 @@ export const Messages = () => {
   });
 
   const [editedInputValue, setEditedInputValue] = useState<string>("");
-  console.log({ editedInputValue });
 
   return (
     <div
@@ -121,14 +120,10 @@ export const Messages = () => {
                   <DropdownMenuItem
                     onSelect={() => {
                       setEditAlertMessageId(message.id);
-
-                      const messagedToEdit =
-                        chat.find(({ id }) => id === message.id)?.text || "";
-
-                      setEditedInputValue(messagedToEdit);
+                      setEditedInputValue(message.text);
                     }}
                   >
-                    <Edit /> Editar
+                    <Edit /> Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
@@ -193,7 +188,7 @@ export const Messages = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently edit your message.
+              This action cannot be undone. This will permanently delete your message.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -205,7 +200,7 @@ export const Messages = () => {
               disabled={isDeleting}
               variant="destructive"
             >
-              {isDeleting ? "Deleting..." : "Continue"}
+              {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
