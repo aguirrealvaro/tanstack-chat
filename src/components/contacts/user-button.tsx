@@ -9,7 +9,9 @@ export const UserButton = ({ user }: { user: UserType }) => {
 
   const lastMessage = getLastMessage(user);
   const isLastMessageFromLoggedInUser = lastMessage?.fromId === loggedInUser.id;
-  const isLastMessageUnseen = !isLastMessageFromLoggedInUser && !lastMessage?.seen;
+  const isLastMessageUnseen =
+    !isLastMessageFromLoggedInUser && (lastMessage ? !lastMessage.seen : false);
+
   const unseenMessages = user.messagesSent.filter((message) => !message.seen).length;
   const showUnseenMessages = !isLastMessageFromLoggedInUser && unseenMessages > 0;
 

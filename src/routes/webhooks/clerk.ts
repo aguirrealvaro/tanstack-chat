@@ -10,9 +10,6 @@ export const Route = createFileRoute("/webhooks/clerk")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        console.log("*********************************");
-        console.log("WEBHOOK_SECRET", WEBHOOK_SECRET);
-        console.log("*********************************");
         if (!WEBHOOK_SECRET) {
           return new Response("Missing WEBHOOK_SECRET", {
             status: 500,
@@ -42,8 +39,6 @@ export const Route = createFileRoute("/webhooks/clerk")({
             "svix-signature": svixSignature,
           }) as WebhookEvent;
         } catch (err) {
-          console.error("Webhook verification failed", err);
-
           return new Response("Invalid signature", {
             status: 400,
           });
@@ -64,8 +59,6 @@ export const Route = createFileRoute("/webhooks/clerk")({
             // eslint-disable-next-line no-shadow
             email_addresses.find((email) => email.id === primary_email_address_id)
               ?.email_address || "";
-
-          console.log({ email, email_addresses, evt });
 
           const newFields = {
             firstName: first_name || "",
