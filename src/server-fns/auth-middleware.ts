@@ -21,14 +21,17 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
         (address) => address.id === clerkUser.primaryEmailAddressId,
       )?.emailAddress ?? "";
 
-    loggedInUser = await prisma.user.create({
-      data: {
-        clerkId: clerkUser.id,
-        firstName: clerkUser.firstName ?? "",
-        lastName: clerkUser.lastName ?? "",
-        email,
-        imageUrl: clerkUser.imageUrl,
-      },
+    const fields = {
+      firstName: clerkUser.firstName ?? "",
+      lastName: clerkUser.lastName ?? "",
+      email,
+      imageUrl: clerkUser.imageUrl,
+    };
+
+    loggedInUser = await prisma.user.upsert({
+      where: { clerkId: clerkUser.id },
+      create: { clerkId: clerkUser.id, ...fields },
+      update: fields,
     });
   }
 
