@@ -1,7 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getLastMessage } from "@/components/contacts/utils";
+import type { UserType } from "@/components/contacts/types";
 import { prisma } from "@/db";
 import { authMiddleware } from "./auth-middleware";
 // import { sleep } from "@/lib/sleep";
+
+const sortUsersByLastMessage = (users: UserType[]) => {
+  return users.sort((a, b) => {
+    const timeA = getLastMessage(a)?.createdAt.getTime() ?? 0;
+    const timeB = getLastMessage(b)?.createdAt.getTime() ?? 0;
+    return timeB - timeA;
+  });
+};
 
 export const getUsers = createServerFn()
   .middleware([authMiddleware])
@@ -29,5 +39,5 @@ export const getUsers = createServerFn()
       },
     });
 
-    return users;
+    return sortUsersByLastMessage(users);
   });
