@@ -1,13 +1,3 @@
 # tanstack-chat
 
-Add environment variables
-
-```bash
-npm i -g vercel
-vercel link --confirm
-vercel env pull
-```
-
-`npm install` Install deps
-
-`npm run dev` Run app
+App made with React, TypeScript, TanStack, Vite, PostgreSQL (Neon) with Prisma, Clerk, Tailwind CSS v4, shadcn/ui, and Radix UI.
