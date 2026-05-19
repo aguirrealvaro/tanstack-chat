@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { createFileRoute } from "@tanstack/react-router";
 import { Webhook } from "svix";
 import type { WebhookEvent } from "@clerk/backend";

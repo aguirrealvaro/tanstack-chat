@@ -1,6 +1,6 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { redirect } from "@tanstack/react-router";
-import { auth } from "@clerk/tanstack-react-start/server";
+import { auth, clerkClient } from "@clerk/tanstack-react-start/server";
 import { prisma } from "@/db";
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
@@ -10,10 +10,26 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
     throw redirect({ to: "/sign-in" });
   }
 
-  const loggedInUser = await prisma.user.findUnique({ where: { clerkId: userId } });
+  let loggedInUser = await prisma.user.findUnique({ where: { clerkId: userId } });
 
+  // Clerk may already have a session while our DB row is still missing: the user.created
+  // webhook runs asynchronously, and OAuth (e.g. Google) redirects to the app before it lands.
   if (!loggedInUser) {
-    throw new Error("No logged-in user");
+    const clerkUser = await clerkClient().users.getUser(userId);
+    const email =
+      clerkUser.emailAddresses.find(
+        (address) => address.id === clerkUser.primaryEmailAddressId,
+      )?.emailAddress ?? "";
+
+    loggedInUser = await prisma.user.create({
+      data: {
+        clerkId: clerkUser.id,
+        firstName: clerkUser.firstName ?? "",
+        lastName: clerkUser.lastName ?? "",
+        email,
+        imageUrl: clerkUser.imageUrl,
+      },
+    });
   }
 
   return next({ context: { loggedInUser } });
