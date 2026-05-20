@@ -14,6 +14,7 @@ export const useDeleteMessageMutation = () => {
     mutationFn: ({ messageId }: DeleteMessageMutation) =>
       deleteMessage({ data: { messageId } }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["chat", selectedUser] });
     },
   });

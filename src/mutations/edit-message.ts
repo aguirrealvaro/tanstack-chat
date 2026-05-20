@@ -15,6 +15,7 @@ export const useEditMessageMutation = () => {
     mutationFn: ({ messageId, newMessageValue }: EditMessageMutation) =>
       editMessage({ data: { messageId, newMessageValue } }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["chat", selectedUser] });
     },
   });
