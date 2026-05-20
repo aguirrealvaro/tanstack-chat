@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useEditMessageMutation } from "@/mutations";
+import { useRef } from "react";
 
 type EditMessageDialogProps = {
   messageId: number | null;
@@ -25,6 +26,8 @@ export const EditMessageDialog = ({
 }: EditMessageDialogProps) => {
   const { mutate, isPending } = useEditMessageMutation();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleEditMessage = () => {
     if (!messageId || !value) return;
     mutate({ messageId, newMessageValue: value });
@@ -37,21 +40,28 @@ export const EditMessageDialog = ({
         if (!open) onOpenChange(false);
       }}
     >
-      <AlertDialogContent>
+      <AlertDialogContent
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+          inputRef.current?.focus();
+        }}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>Edit message</AlertDialogTitle>
+          <AlertDialogDescription className="sr-only">
+            Edit the message text below.
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogDescription>
-          <input
-            type="text"
-            name="message"
-            placeholder="Type a message..."
-            className="w-full flex-1 rounded border bg-transparent p-2 text-primary"
-            value={value}
-            onChange={(e) => onValueChange(e.target.value)}
-          />
-        </AlertDialogDescription>
+        <input
+          type="text"
+          name="message"
+          ref={inputRef}
+          placeholder="Type a message..."
+          className="w-full flex-1 rounded border bg-transparent p-2 text-primary"
+          value={value}
+          onChange={(e) => onValueChange(e.target.value)}
+        />
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
