@@ -2,11 +2,18 @@ import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
 import { useSendMessageMutation } from "@/mutations";
+import { useEffect, useRef } from "react";
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
 
   const { mutate, isPending } = useSendMessageMutation();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!selectedUser) return;
+    inputRef.current?.focus();
+  }, [selectedUser]);
 
   if (!selectedUser) return null;
 
@@ -28,6 +35,7 @@ export const InputMessage = () => {
   return (
     <form onSubmit={handleSubmit} className="flex items-center justify-between gap-4">
       <input
+        ref={inputRef}
         type="text"
         name="message"
         placeholder="Type a message..."
