@@ -5,7 +5,7 @@ import { prisma } from "@/db";
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET!;
 
-export const Route = createFileRoute("/webhooks/clerk")({
+export const Route = createFileRoute("/api/webhooks/clerk")({
   server: {
     handlers: {
       POST: async ({ request }) => {
