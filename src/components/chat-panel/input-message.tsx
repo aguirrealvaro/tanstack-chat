@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Send } from "lucide-react";
 import { useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef } from "react";
+import { UploadButton } from "@/utils/uploadthing";
 
 export const InputMessage = () => {
   const { user: selectedUser } = HomeRoute.useSearch();
@@ -34,6 +35,7 @@ export const InputMessage = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center justify-between gap-4">
+      <UploadButton endpoint="imageUploader" />
       <input
         ref={inputRef}
         type="text"
