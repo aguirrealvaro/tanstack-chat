@@ -1,5 +1,5 @@
 # tanstack-chat
 
-**Live:** [tanstack-chat.aguirrealvaro.dev](https://tanstack-chat.aguirrealvaro.dev/)
+**Live:** [chat.aguirrealvaro.dev](https://chat.aguirrealvaro.dev/)
 
 Chat app made with React, TypeScript, TanStack, Vite, Prisma, Clerk, Tailwind, shadcn/ui, and Radix UI.
