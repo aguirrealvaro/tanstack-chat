@@ -1,5 +1,6 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
+import { LoadingSpinner } from "@/components";
 import { Loader2, Plus, Send, X } from "lucide-react";
 import { useDeleteImageMutation, useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef, useState } from "react";
@@ -75,11 +76,7 @@ export const InputMessage = () => {
                   isLoading ? "opacity-50" : "hover:bg-muted",
                 )}
               >
-                {isLoading ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Plus size={18} />
-                )}
+                {isLoading ? <LoadingSpinner /> : <Plus size={18} />}
               </span>
             );
           },
@@ -129,11 +126,7 @@ export const InputMessage = () => {
           "disabled:opacity-50",
         )}
       >
-        {isSendingMessage ? (
-          <Loader2 size={18} className="animate-spin" />
-        ) : (
-          <Send size={18} />
-        )}
+        {isSendingMessage ? <LoadingSpinner /> : <Send size={18} />}
       </button>
     </form>
   );

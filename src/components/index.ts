@@ -4,3 +4,4 @@ export { Contacts } from "./contacts/contacts";
 export { ChatPanel } from "./chat-panel";
 export { Footer } from "./footer";
 export { DoubleCheck } from "./double-check";
+export { LoadingSpinner } from "./loading-spinner";
