@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
 import { Plus, Send } from "lucide-react";
@@ -58,6 +59,12 @@ export const InputMessage = () => {
             </span>
           ),
           allowedContent: "",
+        }}
+        onClientUploadComplete={(res) => {
+          const file = res[0];
+          if (!file) return;
+          const imageUrl = file.ufsUrl;
+          console.log({ imageUrl });
         }}
       />
       <input
