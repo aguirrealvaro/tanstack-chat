@@ -6,7 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 
 export const InputMessage = () => {
-  const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(undefined);
+  const [previewImage, setPreviewImage] = useState<{ key: string; url: string } | undefined>(
+    undefined,
+  );
   const { user: selectedUser } = HomeRoute.useSearch();
 
   const { mutate, isPending } = useSendMessageMutation();
@@ -31,7 +33,11 @@ export const InputMessage = () => {
       form.reset();
     };
 
-    mutate({ message, selectedUser, imageUrl: previewImageUrl, resetForm });
+    mutate({ message, selectedUser, imageUrl: previewImage?.url, resetForm });
+  };
+
+  const handleClearImage = () => {
+    setPreviewImage(undefined);
   };
 
   return (
@@ -61,19 +67,19 @@ export const InputMessage = () => {
           allowedContent: "",
         }}
         onClientUploadComplete={(res) => {
-          const imageUrl = res[0]?.ufsUrl ?? res[0]?.url;
-          if (!imageUrl) return;
+          const image = res[0];
+          if (!image) return;
 
-          setPreviewImageUrl(imageUrl);
+          setPreviewImage({ key: image.key, url: image.ufsUrl });
         }}
       />
       <div className="flex flex-1 gap-4 rounded border bg-transparent p-2">
-        {previewImageUrl && (
+        {previewImage && (
           <div className="flex items-center gap-1 bg-muted text-sm">
-            <a href={previewImageUrl} target="_blank" rel="noopener noreferrer">
+            <a href={previewImage.url} target="_blank" rel="noopener noreferrer">
               Image
             </a>
-            <button onClick={() => setPreviewImageUrl(undefined)} className="cursor-pointer">
+            <button onClick={handleClearImage}>
               <X size={14} />
             </button>
           </div>
