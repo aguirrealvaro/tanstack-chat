@@ -116,7 +116,11 @@ export const InputMessage = () => {
           "disabled:opacity-50",
         )}
       >
-        <Send size={18} />
+        {isSendingMessage ? (
+          <Loader2 size={18} className="animate-spin" />
+        ) : (
+          <Send size={18} />
+        )}
       </button>
     </form>
   );
