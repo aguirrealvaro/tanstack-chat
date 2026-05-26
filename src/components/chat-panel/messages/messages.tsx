@@ -70,7 +70,7 @@ export const Messages = () => {
                   <img
                     src={message.imageUrl}
                     alt={`Message image ${message.id}`}
-                    className="size-32 object-contain"
+                    className="size-32 rounded-lg object-cover"
                   />
                 </a>
               )}
