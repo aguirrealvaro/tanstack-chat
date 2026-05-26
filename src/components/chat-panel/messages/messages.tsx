@@ -74,7 +74,7 @@ export const Messages = () => {
                   />
                 </a>
               )}
-              <span>{message.text}</span>
+              {message.text && <span>{message.text}</span>}
             </div>
 
             <div className="flex shrink-0 translate-y-0.5 items-center gap-2 self-end text-xs text-muted-foreground">
