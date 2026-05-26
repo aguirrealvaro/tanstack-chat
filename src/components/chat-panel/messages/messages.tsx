@@ -64,6 +64,13 @@ export const Messages = () => {
                 : cn("mr-4 self-start", "bg-muted text-foreground"),
             )}
           >
+            {message.imageUrl && (
+              <img
+                src={message.imageUrl}
+                alt={`Message image ${message.id}`}
+                className="size-32"
+              />
+            )}
             <span>{message.text}</span>
             <div className="flex shrink-0 translate-y-0.5 items-center gap-2 self-end text-xs text-muted-foreground">
               {message.edited && <span>Edited</span>}

@@ -5,6 +5,7 @@ import { Route as HomeRoute } from "@/routes/index";
 
 type SendMessageMutation = {
   message: string;
+  imageUrl?: string;
   selectedUser: number;
   resetForm?: () => void;
 };
@@ -19,14 +20,16 @@ export const useSendMessageMutation = () => {
 
     const previousMessages = queryClient.getQueryData<Message[]>(["chat", data.selectedUser]);
 
-    const messageToAdd = {
+    const messageToAdd: Message = {
       id: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
       text: data.message,
+      imageUrl: data.imageUrl || null,
       fromId: loggedInUser.id,
       toId: data.selectedUser,
       seen: false,
+      edited: false,
     };
 
     const newMessages = previousMessages
@@ -41,8 +44,8 @@ export const useSendMessageMutation = () => {
   };
 
   return useMutation({
-    mutationFn: ({ message, selectedUser: toUserId }: SendMessageMutation) =>
-      sendMessage({ data: { message, selectedUser: toUserId } }),
+    mutationFn: ({ message, imageUrl, selectedUser: toUserId }: SendMessageMutation) =>
+      sendMessage({ data: { message, imageUrl, selectedUser: toUserId } }),
     onMutate: async (data) => {
       const { previousMessages } = await optimisticUpdateMessages(data);
       return { previousMessages };
