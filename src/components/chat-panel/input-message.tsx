@@ -33,6 +33,7 @@ export const InputMessage = () => {
 
     const resetForm = () => {
       form.reset();
+      setPreviewImage(undefined);
     };
 
     sendMessage({ message, selectedUser, imageUrl: previewImage?.url, resetForm });
