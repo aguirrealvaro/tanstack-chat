@@ -65,11 +65,24 @@ export const InputMessage = () => {
           allowedContent: "hidden",
         }}
         content={{
-          button: (
-            <span className="rounded p-2 transition hover:bg-muted">
-              <Plus size={18} />
-            </span>
-          ),
+          button({ ready, isUploading }) {
+            const isLoading = !ready || isUploading;
+
+            return (
+              <span
+                className={cn(
+                  "rounded p-2 transition",
+                  isLoading ? "opacity-50" : "hover:bg-muted",
+                )}
+              >
+                {isLoading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <Plus size={18} />
+                )}
+              </span>
+            );
+          },
           allowedContent: "",
         }}
         onClientUploadComplete={(res) => {
