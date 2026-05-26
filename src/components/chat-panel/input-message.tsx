@@ -1,7 +1,7 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
-import { Plus, Send, X } from "lucide-react";
-import { useSendMessageMutation } from "@/mutations";
+import { Loader2, Plus, Send, X } from "lucide-react";
+import { useDeleteImageMutation, useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef, useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 
@@ -11,7 +11,8 @@ export const InputMessage = () => {
   );
   const { user: selectedUser } = HomeRoute.useSearch();
 
-  const { mutate, isPending } = useSendMessageMutation();
+  const { mutate: sendMessage, isPending: isSendingMessage } = useSendMessageMutation();
+  const { mutate: deletePreviewImage, isPending: isDeletingImage } = useDeleteImageMutation();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -33,11 +34,16 @@ export const InputMessage = () => {
       form.reset();
     };
 
-    mutate({ message, selectedUser, imageUrl: previewImage?.url, resetForm });
+    sendMessage({ message, selectedUser, imageUrl: previewImage?.url, resetForm });
   };
 
   const handleClearImage = () => {
-    setPreviewImage(undefined);
+    if (!previewImage || isDeletingImage) return;
+
+    deletePreviewImage(
+      { fileKey: previewImage.key },
+      { onSuccess: () => setPreviewImage(undefined) },
+    );
   };
 
   return (
@@ -79,8 +85,17 @@ export const InputMessage = () => {
             <a href={previewImage.url} target="_blank" rel="noopener noreferrer">
               Image
             </a>
-            <button onClick={handleClearImage}>
-              <X size={14} />
+            <button
+              type="button"
+              onClick={handleClearImage}
+              disabled={isDeletingImage}
+              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isDeletingImage ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <X size={14} />
+              )}
             </button>
           </div>
         )}
@@ -94,7 +109,7 @@ export const InputMessage = () => {
       </div>
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isSendingMessage}
         className={cn(
           "bg-foreground text-background",
           "rounded px-4 py-2",
