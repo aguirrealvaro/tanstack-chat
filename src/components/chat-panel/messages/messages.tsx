@@ -66,11 +66,13 @@ export const Messages = () => {
           >
             <div className="flex flex-col gap-2">
               {message.imageUrl && (
-                <img
-                  src={message.imageUrl}
-                  alt={`Message image ${message.id}`}
-                  className="size-32"
-                />
+                <a href={message.imageUrl} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={message.imageUrl}
+                    alt={`Message image ${message.id}`}
+                    className="size-32"
+                  />
+                </a>
               )}
               <span>{message.text}</span>
             </div>
