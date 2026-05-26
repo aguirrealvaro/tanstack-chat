@@ -1,11 +1,12 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
-import { Plus, Send } from "lucide-react";
+import { Plus, Send, X } from "lucide-react";
 import { useSendMessageMutation } from "@/mutations";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 
 export const InputMessage = () => {
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(undefined);
   const { user: selectedUser } = HomeRoute.useSearch();
 
   const { mutate, isPending } = useSendMessageMutation();
@@ -30,7 +31,7 @@ export const InputMessage = () => {
       form.reset();
     };
 
-    mutate({ message, selectedUser, resetForm });
+    mutate({ message, selectedUser, imageUrl: previewImageUrl, resetForm });
   };
 
   return (
@@ -63,16 +64,28 @@ export const InputMessage = () => {
           const imageUrl = res[0]?.ufsUrl ?? res[0]?.url;
           if (!imageUrl) return;
 
-          mutate({ message: "", selectedUser, imageUrl });
+          setPreviewImageUrl(imageUrl);
         }}
       />
-      <input
-        ref={inputRef}
-        type="text"
-        name="message"
-        placeholder="Type a message..."
-        className="flex-1 rounded border bg-transparent p-2"
-      />
+      <div className="flex flex-1 gap-4 rounded border bg-transparent p-2">
+        {previewImageUrl && (
+          <div className="flex items-center gap-1 bg-muted text-sm">
+            <a href={previewImageUrl} target="_blank" rel="noopener noreferrer">
+              Image
+            </a>
+            <button onClick={() => setPreviewImageUrl(undefined)} className="cursor-pointer">
+              <X size={14} />
+            </button>
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          type="text"
+          name="message"
+          placeholder="Type a message..."
+          className="w-full border-0 bg-transparent outline-none focus-visible:ring-0"
+        />
+      </div>
       <button
         type="submit"
         disabled={isPending}
