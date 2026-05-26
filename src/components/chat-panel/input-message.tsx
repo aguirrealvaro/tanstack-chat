@@ -1,6 +1,6 @@
 import { Route as HomeRoute } from "@/routes/index";
 import { cn } from "@/lib/utils";
-import { Send } from "lucide-react";
+import { Plus, Send } from "lucide-react";
 import { useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef } from "react";
 import { UploadButton } from "@/utils/uploadthing";
@@ -35,7 +35,31 @@ export const InputMessage = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center justify-between gap-4">
-      <UploadButton endpoint="imageUploader" />
+      <UploadButton
+        endpoint="imageUploader"
+        config={{ cn }}
+        appearance={{
+          container: "gap-0",
+          button: cn(
+            "h-auto min-h-0 w-auto p-0",
+            "bg-transparent text-foreground shadow-none",
+            "ring-0 after:hidden focus-within:ring-0 focus-within:ring-offset-0",
+            "data-[state=ready]:bg-transparent",
+            "data-[state=readying]:bg-transparent",
+            "data-[state=uploading]:bg-transparent",
+            "data-[state=disabled]:bg-transparent",
+          ),
+          allowedContent: "hidden",
+        }}
+        content={{
+          button: (
+            <span className="rounded p-2 transition hover:bg-muted">
+              <Plus size={18} />
+            </span>
+          ),
+          allowedContent: "",
+        }}
+      />
       <input
         ref={inputRef}
         type="text"
