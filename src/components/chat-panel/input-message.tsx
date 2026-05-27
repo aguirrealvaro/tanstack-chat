@@ -4,13 +4,12 @@ import { LoadingSpinner } from "@/components";
 import { Loader2, Plus, Send, X } from "lucide-react";
 import { useDeleteImageMutation, useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef, useState } from "react";
+import { getImageKeyFromUrl } from "@/utils";
 import { UploadButton } from "@/utils/uploadthing";
 import { toast } from "sonner";
 
 export const InputMessage = () => {
-  const [previewImage, setPreviewImage] = useState<{ key: string; url: string } | undefined>(
-    undefined,
-  );
+  const [previewImage, setPreviewImage] = useState<string | undefined>(undefined);
   const { user: selectedUser } = HomeRoute.useSearch();
 
   const { mutate: sendMessage, isPending: isSendingMessage } = useSendMessageMutation();
@@ -37,14 +36,14 @@ export const InputMessage = () => {
       setPreviewImage(undefined);
     };
 
-    sendMessage({ message, selectedUser, imageUrl: previewImage?.url, resetForm });
+    sendMessage({ message, selectedUser, imageUrl: previewImage, resetForm });
   };
 
   const handleClearImage = () => {
     if (!previewImage || isDeletingImage) return;
 
     deletePreviewImage(
-      { fileKey: previewImage.key },
+      { fileKey: getImageKeyFromUrl(previewImage) },
       { onSuccess: () => setPreviewImage(undefined) },
     );
   };
@@ -79,7 +78,7 @@ export const InputMessage = () => {
             const image = res[0];
             if (!image) return;
 
-            setPreviewImage({ key: image.key, url: image.ufsUrl });
+            setPreviewImage(image.ufsUrl);
           }}
           onUploadError={(error: Error) => {
             toast.error(error.message);
@@ -87,7 +86,7 @@ export const InputMessage = () => {
         />
         {previewImage && (
           <div className="flex items-center gap-1 bg-muted text-sm">
-            <a href={previewImage.url} target="_blank" rel="noopener noreferrer">
+            <a href={previewImage} target="_blank" rel="noopener noreferrer">
               Image
             </a>
             <button
