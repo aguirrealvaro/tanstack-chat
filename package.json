@@ -79,14 +79,5 @@
   },
   "overrides": {
     "effect": "3.20.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ],
-    "overrides": {
-      "effect": "3.20.0"
-    }
   }
 }
