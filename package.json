@@ -77,10 +77,16 @@
     "vite": "^8.0.0",
     "vitest": "^4.1.5"
   },
+  "overrides": {
+    "effect": "3.20.0"
+  },
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
       "lightningcss"
-    ]
+    ],
+    "overrides": {
+      "effect": "3.20.0"
+    }
   }
 }
