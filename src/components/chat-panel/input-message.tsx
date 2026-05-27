@@ -5,6 +5,7 @@ import { Loader2, Plus, Send, X } from "lucide-react";
 import { useDeleteImageMutation, useSendMessageMutation } from "@/mutations";
 import { useEffect, useRef, useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
+import { toast } from "sonner";
 
 export const InputMessage = () => {
   const [previewImage, setPreviewImage] = useState<{ key: string; url: string } | undefined>(
@@ -79,6 +80,9 @@ export const InputMessage = () => {
             if (!image) return;
 
             setPreviewImage({ key: image.key, url: image.ufsUrl });
+          }}
+          onUploadError={(error: Error) => {
+            toast.error(error.message);
           }}
         />
         {previewImage && (

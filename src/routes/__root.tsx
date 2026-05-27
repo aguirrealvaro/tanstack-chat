@@ -10,6 +10,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ClerkProvider, ThemeProvider } from "@/providers";
 import appCss from "../styles.css?url";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -73,6 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 },
               ]}
             />
+            <Toaster />
           </ClerkProvider>
         </ThemeProvider>
         <Scripts />
