@@ -70,7 +70,6 @@ export const InputMessage = () => {
           content={{
             button({ ready, isUploading }) {
               const isLoading = !ready || isUploading;
-
               return isLoading ? <LoadingSpinner /> : <Plus size={18} />;
             },
             allowedContent: "",
