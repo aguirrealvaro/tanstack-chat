@@ -1,7 +1,11 @@
-import { createServerFn } from "@tanstack/react-start";
-import { authMiddleware } from "./auth-middleware";
-import { z } from "zod";
 import { prisma } from "@/db";
+import { getImageKeyFromUrl } from "@/utils";
+import { createServerFn } from "@tanstack/react-start";
+import { UTApi } from "uploadthing/server";
+import { z } from "zod";
+import { authMiddleware } from "./auth-middleware";
+
+const utapi = new UTApi();
 
 export const deleteMessage = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
@@ -16,6 +20,10 @@ export const deleteMessage = createServerFn({ method: "POST" })
 
     if (!isOwner) {
       throw new Error("This is not your message");
+    }
+
+    if (message.imageUrl) {
+      await utapi.deleteFiles(getImageKeyFromUrl(message.imageUrl));
     }
 
     const deletedMessage = await prisma.message.delete({ where: { id: messageId } });
