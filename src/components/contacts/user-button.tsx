@@ -3,6 +3,7 @@ import { Route as HomeRoute } from "@/routes/index";
 import { getLastMessage, getMessageTime } from "./utils";
 import type { UserType } from "./types";
 import { DoubleCheck } from "../double-check";
+import { Image } from "lucide-react";
 
 export const UserButton = ({ user }: { user: UserType }) => {
   const { loggedInUser } = HomeRoute.useRouteContext();
@@ -50,6 +51,7 @@ export const UserButton = ({ user }: { user: UserType }) => {
           {lastMessage && (
             <div className="flex items-center gap-2">
               {isLastMessageFromLoggedInUser && <DoubleCheck seen={lastMessage.seen} />}
+              {lastMessage.imageUrl && <Image size={16} className="text-muted-foreground" />}
               <span className="line-clamp-2 min-w-0 text-left text-sm text-muted-foreground">
                 {lastMessage.text}
               </span>
