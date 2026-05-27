@@ -29,7 +29,12 @@ function Home() {
 
   return (
     <>
-      <main className="m-4 flex h-full rounded border bg-card text-card-foreground shadow">
+      <main
+        className={cn(
+          "flex h-full bg-card text-card-foreground",
+          "sm:m-4 sm:rounded sm:border sm:shadow",
+        )}
+      >
         <div
           className={cn(
             "flex-1 flex-col border-r p-4 sm:flex",

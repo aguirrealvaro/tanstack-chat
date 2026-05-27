@@ -1,6 +1,13 @@
+import { cn } from "@/lib/utils";
+
 export const Footer = () => {
   return (
-    <footer className="mb-4 flex items-center justify-center text-center text-sm text-muted-foreground">
+    <footer
+      className={cn(
+        "mb-4 items-center justify-center text-center text-sm text-muted-foreground",
+        "hidden sm:flex",
+      )}
+    >
       <span>
         Made by{" "}
         <a
