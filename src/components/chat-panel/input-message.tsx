@@ -30,7 +30,7 @@ export const InputMessage = () => {
     const formData = new FormData(form);
     const message = (formData.get("message") as string).trim();
 
-    if (!message) return;
+    if (!message && !previewImage) return;
 
     const resetForm = () => {
       form.reset();
