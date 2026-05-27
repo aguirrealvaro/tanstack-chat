@@ -50,47 +50,38 @@ export const InputMessage = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center justify-between gap-4">
-      <UploadButton
-        endpoint="imageUploader"
-        config={{ cn }}
-        appearance={{
-          container: "gap-0",
-          button: cn(
-            "h-auto min-h-0 w-auto p-0",
-            "bg-transparent text-foreground shadow-none",
-            "ring-0 after:hidden focus-within:ring-0 focus-within:ring-offset-0",
-            "data-[state=ready]:bg-transparent",
-            "data-[state=readying]:bg-transparent",
-            "data-[state=uploading]:bg-transparent",
-            "data-[state=disabled]:bg-transparent",
-          ),
-          allowedContent: "hidden",
-        }}
-        content={{
-          button({ ready, isUploading }) {
-            const isLoading = !ready || isUploading;
-
-            return (
-              <span
-                className={cn(
-                  "rounded p-2 transition",
-                  isLoading ? "opacity-50" : "hover:bg-muted",
-                )}
-              >
-                {isLoading ? <LoadingSpinner /> : <Plus size={18} />}
-              </span>
-            );
-          },
-          allowedContent: "",
-        }}
-        onClientUploadComplete={(res) => {
-          const image = res[0];
-          if (!image) return;
-
-          setPreviewImage({ key: image.key, url: image.ufsUrl });
-        }}
-      />
       <div className="flex flex-1 gap-4 rounded border bg-transparent p-2">
+        <UploadButton
+          endpoint="imageUploader"
+          config={{ cn }}
+          appearance={{
+            container: "gap-0",
+            button: cn(
+              "h-auto min-h-0 w-auto p-0",
+              "bg-transparent text-foreground shadow-none",
+              "ring-0 after:hidden focus-within:ring-0 focus-within:ring-offset-0",
+              "data-[state=ready]:bg-transparent",
+              "data-[state=readying]:bg-transparent",
+              "data-[state=uploading]:bg-transparent",
+              "data-[state=disabled]:bg-transparent",
+            ),
+            allowedContent: "hidden",
+          }}
+          content={{
+            button({ ready, isUploading }) {
+              const isLoading = !ready || isUploading;
+
+              return isLoading ? <LoadingSpinner /> : <Plus size={18} />;
+            },
+            allowedContent: "",
+          }}
+          onClientUploadComplete={(res) => {
+            const image = res[0];
+            if (!image) return;
+
+            setPreviewImage({ key: image.key, url: image.ufsUrl });
+          }}
+        />
         {previewImage && (
           <div className="flex items-center gap-1 bg-muted text-sm">
             <a href={previewImage.url} target="_blank" rel="noopener noreferrer">
