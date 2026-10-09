@@ -2,9 +2,11 @@
 
 import { tanstackConfig } from "@tanstack/eslint-config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
   ...tanstackConfig,
+  reactHooks.configs.flat["recommended-latest"],
   {
     rules: {
       "no-console": "warn",
