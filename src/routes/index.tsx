@@ -17,9 +17,15 @@ export const Route = createFileRoute("/")({
   }),
   loaderDeps: ({ search: { user: selectedUser } }) => ({ selectedUser }),
   loader: ({ deps: { selectedUser }, context: { queryClient } }) => {
-    // `prefetchQuery` instead of `ensureQueryData` to avoid blocking the main thread and use suspense instead
-    queryClient.prefetchQuery(usersQueryOptions());
-    queryClient.prefetchQuery(chatQueryOptions(selectedUser));
+    // Fire-and-forget so the loader doesn't block; Suspense handles loading
+    void queryClient.query({
+      ...usersQueryOptions(),
+      staleTime: "static", // ≈ old ensureQueryData: if cached, use it and do not revalidate.
+    });
+    void queryClient.query({
+      ...chatQueryOptions(selectedUser),
+      staleTime: "static", // ≈ old ensureQueryData: if cached, use it and do not revalidate.
+    });
   },
 });
 
